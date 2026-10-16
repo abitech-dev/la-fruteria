@@ -16,8 +16,7 @@ export function leerConfig(entorno = process.env) {
   };
 }
 
-// El archivo es el secreto de Compose o de Kubernetes; la variable sirve
-// en los volúmenes que todavía no enseñan secretos.
+// Primero el archivo del secreto; la variable queda para los primeros volúmenes.
 function leerClave(entorno) {
   if (entorno.BD_CLAVE_ARCHIVO) return readFileSync(entorno.BD_CLAVE_ARCHIVO, 'utf8').trim();
   if (entorno.BD_CLAVE) return entorno.BD_CLAVE;

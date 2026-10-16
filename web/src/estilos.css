@@ -104,7 +104,7 @@ h3 {
   box-shadow: 0 0 0 3px rgb(138 144 201 / 30%);
 }
 
-/* La letra de plantilla imita la pintura de las cajas y los contenedores. */
+/* Letra de plantilla, como la pintura de las cajas. */
 .plantilla {
   font-family: "Plantilla", "Arial Narrow", sans-serif;
   font-weight: 800;
@@ -234,7 +234,7 @@ h3 {
   width: 86%;
 }
 
-/* El sello imita el de inspección que llevan las cajas de exportación. */
+/* Sello de inspección de las cajas de exportación. */
 .sello {
   position: absolute;
   top: -0.5rem;
@@ -299,7 +299,7 @@ h3 {
   }
 }
 
-/* En el celular, la fruta se ve antes sin bajar tanto. */
+/* En el celular, menos alto antes del catálogo. */
 @media (max-width: 51.99rem) {
   .portada-figura {
     width: min(100%, 15rem);
@@ -469,7 +469,7 @@ h3 {
   transform: scale(1.06) rotate(-2deg);
 }
 
-/* El rótulo repite la etiqueta impresa de una caja de exportación. */
+/* Rótulo como la etiqueta de una caja de exportación. */
 .rotulo {
   display: flex;
   justify-content: space-between;
@@ -637,7 +637,7 @@ h3 {
   cursor: pointer;
 }
 
-/* En pantallas angostas el pedido es una hoja que sube desde abajo. */
+/* En pantallas angostas, el pedido sube como hoja. */
 @media (max-width: 63.99rem) {
   .pedido {
     position: fixed;
@@ -780,7 +780,7 @@ body.con-hoja {
   font-size: 0.9rem;
 }
 
-/* En escritorio el panel ocupa el alto de la pantalla y solo la lista se desplaza. */
+/* En escritorio, solo la lista se desplaza. */
 @media (min-width: 64rem) {
   .pedido {
     display: flex;
@@ -900,7 +900,7 @@ body.con-hoja {
   font-weight: 700;
 }
 
-/* El ticket de despacho lleva muescas, como el que se pega a la caja. */
+/* Ticket con muescas, como el de despacho. */
 .ticket {
   padding: 1.25rem 1.4rem;
   background: var(--pulpa);
@@ -963,7 +963,7 @@ body.con-hoja {
   background: rgb(255 255 255 / 10%);
 }
 
-/* En el celular, la barra inferior ya lleva el pedido. */
+/* En el celular, la barra inferior hace de botón del pedido. */
 @media (max-width: 39.99rem) {
   .boton-carrito {
     display: none;

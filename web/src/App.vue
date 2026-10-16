@@ -37,7 +37,7 @@ async function abrirPedido(evento) {
   panel.value.enfocarCierre();
 }
 
-// El foco vuelve después de que Vue quita el inert al resto de la página.
+// Espera a que Vue quite el inert para devolver el foco.
 async function cerrarPedido({ isFocoDeVuelta = true } = {}) {
   if (!isHojaAbierta.value) return;
   isHojaAbierta.value = false;

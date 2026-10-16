@@ -9,7 +9,7 @@ const cantidad = computed(() => cantidadDe(props.producto.codigo));
 const agregar = ref();
 const selector = ref();
 
-// El «+» y el selector se reemplazan; el foco pasa al botón que queda.
+// Al cambiar el «+» por el selector, el foco pasa al botón nuevo.
 async function cambiar(diferencia) {
   cambiarCantidad(props.producto.codigo, diferencia);
   await nextTick();

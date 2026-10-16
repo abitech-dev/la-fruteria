@@ -9,7 +9,7 @@ const emit = defineEmits(['cerrar', 'comprar']);
 const panel = ref();
 const cierre = ref();
 
-// Si la línea desaparece, el foco vuelve al panel para no perderse.
+// Si la línea se va, el foco pasa al panel.
 async function cambiar(codigo, diferencia) {
   cambiarCantidad(codigo, diferencia);
   await nextTick();

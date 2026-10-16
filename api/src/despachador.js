@@ -19,7 +19,7 @@ for (const senal of ['SIGTERM', 'SIGINT']) {
 
 registrar('info', 'despachador esperando pedidos');
 while (!isDetenido) {
-  // El healthcheck mira la edad de este archivo; si el bucle se cuelga, envejece.
+  // Señal de vida para el healthcheck.
   writeFileSync(config.latido, String(Date.now()));
   const codigo = await cola.tomarDespacho(SEGUNDOS_DE_ESPERA_EN_LA_COLA);
   if (!codigo) continue;

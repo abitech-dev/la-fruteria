@@ -1,7 +1,6 @@
 name: la-fruteria
 
-# Los servicios propios corren sin privilegios extra y con el sistema
-# de archivos de solo lectura.
+# Servicios propios sin privilegios y en solo lectura.
 x-endurecido: &endurecido
   read_only: true
   tmpfs:
@@ -139,7 +138,7 @@ services:
 
 networks:
   frente: {}
-  # No sale a internet. La base de datos y Redis solo hablan con la API.
+  # Sin salida a internet; solo la API llega a la base y a Redis.
   fondo:
     internal: true
 

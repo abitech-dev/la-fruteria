@@ -21,7 +21,7 @@ async function abrir(codigoDelPedido) {
   else campo.value.focus();
 }
 
-// Mientras el pedido se prepara, la ventana vuelve a preguntar sola.
+// Consulta cada 2 segundos hasta que el pedido sale.
 async function consultar() {
   clearTimeout(consultaProgramada);
   const buscado = codigo.value.trim().toUpperCase();

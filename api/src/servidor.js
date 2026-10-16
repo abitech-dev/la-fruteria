@@ -11,8 +11,7 @@ const servidor = app.listen(config.puerto, () => {
   registrar('info', 'API escuchando', { puerto: config.puerto });
 });
 
-// Al detener el contenedor, Docker manda SIGTERM y espera 10 segundos.
-// Se terminan las solicitudes en curso antes de cerrar las conexiones.
+// Ante SIGTERM se terminan las solicitudes en curso y luego se cierra.
 for (const senal of ['SIGTERM', 'SIGINT']) {
   process.once(senal, () => {
     registrar('info', 'cerrando la API', { senal });

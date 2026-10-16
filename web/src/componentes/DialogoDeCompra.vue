@@ -37,7 +37,7 @@ async function confirmar() {
   }
 }
 
-// Un clic sobre el fondo oscuro cae en el propio diálogo y lo cierra.
+// Un clic en el fondo oscuro cierra la ventana.
 const cerrarSiEsElFondo = (evento) => evento.target === evento.currentTarget && cerrar();
 
 defineExpose({ abrir, cerrar });
