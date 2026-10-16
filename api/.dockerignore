@@ -1,0 +1,6 @@
+node_modules
+pruebas
+Dockerfile
+.dockerignore
+*.md
+.env*

@@ -1,0 +1,21 @@
+{
+  "name": "la-fruteria-api",
+  "version": "1.0.0",
+  "description": "API de pedidos y despachador de La Frutería.",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node src/servidor.js",
+    "despachar": "node src/despachador.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "express": "5.3.0",
+    "pg": "8.23.1",
+    "prom-client": "15.1.3",
+    "redis": "6.3.0"
+  }
+}
