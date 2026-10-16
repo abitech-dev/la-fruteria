@@ -21,7 +21,7 @@ Dice qué gana la tienda en cada capítulo y qué etiqueta de Git marca ese esta
 | 2 | Archivos y permisos | La carpeta `web/` con la vitrina en Vue. | `vol00-cap02` |
 | 3 | Procesos y servicios | Sin cambios. | `vol00-cap03` |
 | 4 | Variables de entorno | Sin cambios. | `vol00-cap04` |
-| 5 | Redes | La vitrina en `localhost:5173` con `npm run dev`. | `vol00-cap05` |
+| 5 | Redes | Sin cambios. | `vol00-cap05` |
 | 6 | HTTP | Sin cambios. | `vol00-cap06` |
 | 7 | YAML, JSON y Git | El primer commit propio y el `.gitignore`. | `vol00-cap07` |
 
