@@ -1,0 +1,152 @@
+name: la-fruteria
+
+# Los servicios propios corren sin privilegios extra y con el sistema
+# de archivos de solo lectura.
+x-endurecido: &endurecido
+  read_only: true
+  tmpfs:
+    - /tmp
+  cap_drop:
+    - ALL
+  security_opt:
+    - no-new-privileges:true
+  restart: unless-stopped
+
+x-salud: &salud
+  interval: 10s
+  timeout: 3s
+  retries: 3
+  start_period: 15s
+  start_interval: 2s
+
+services:
+  web:
+    <<: *endurecido
+    build: ./web
+    image: la-fruteria-web
+    ports:
+      - "127.0.0.1:8080:8080"
+    networks:
+      - frente
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      <<: *salud
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8080/"]
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 64M
+          pids: 100
+
+  api:
+    <<: *endurecido
+    build: ./api
+    image: la-fruteria-api
+    environment:
+      BD_CLAVE_ARCHIVO: /run/secrets/bd_clave
+    secrets:
+      - bd_clave
+    networks:
+      - frente
+      - fondo
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      <<: *salud
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/salud/listo').then((r) => process.exit(r.ok ? 0 : 1), () => process.exit(1))"]
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+          pids: 100
+
+  despachador:
+    <<: *endurecido
+    build: ./api
+    image: la-fruteria-api
+    command: ["node", "src/despachador.js"]
+    environment:
+      BD_CLAVE_ARCHIVO: /run/secrets/bd_clave
+    secrets:
+      - bd_clave
+    networks:
+      - fondo
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      <<: *salud
+      test: ["CMD", "node", "-e", "process.exit(Date.now() - require('node:fs').statSync('/tmp/latido').mtimeMs < 30000 ? 0 : 1)"]
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 128M
+          pids: 100
+
+  postgres:
+    image: postgres:18-alpine@sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873
+    environment:
+      POSTGRES_DB: fruteria
+      POSTGRES_USER: fruteria
+      POSTGRES_PASSWORD_FILE: /run/secrets/bd_clave
+    secrets:
+      - bd_clave
+    volumes:
+      - datos-postgres:/var/lib/postgresql
+      - ./base-de-datos:/docker-entrypoint-initdb.d:ro
+    networks:
+      - fondo
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    healthcheck:
+      <<: *salud
+      test: ["CMD", "pg_isready", "-U", "fruteria", "-d", "fruteria"]
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 512M
+
+  redis:
+    image: redis:8-alpine@sha256:3811787313eba226a2ef38658c6ccb91cd5e110edc89c37767de373120a0e5a0
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - datos-redis:/data
+    networks:
+      - fondo
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    healthcheck:
+      <<: *salud
+      test: ["CMD", "redis-cli", "ping"]
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 128M
+
+networks:
+  frente: {}
+  # No sale a internet. La base de datos y Redis solo hablan con la API.
+  fondo:
+    internal: true
+
+volumes:
+  datos-postgres: {}
+  datos-redis: {}
+
+secrets:
+  bd_clave:
+    file: ./secretos/bd_clave.txt

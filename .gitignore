@@ -1,0 +1,6 @@
+node_modules/
+.env
+/secretos/*
+!/secretos/.gitkeep
+/pruebas/navegador/capturas/
+dist/
