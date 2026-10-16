@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 300" role="img" aria-label="Paltas y arándanos recién cosechados">
+  <path d="M60 60 C 120 0, 280 10, 320 90 C 360 170, 300 280, 190 285 C 80 290, 10 230, 20 150 C 25 110, 35 85, 60 60 Z" fill="#e7eed2"/>
+  <path d="M250 40 C 278 18, 318 22, 334 36 C 312 38, 290 48, 270 64 Z" fill="#5b8c2a"/>
+  <path d="M250 40 C 236 18, 206 14, 190 26 C 212 28, 230 40, 244 54 Z" fill="#79a83c"/>
+  <path d="M150 50 C 182 50, 202 98, 206 136 C 214 194, 186 236, 150 236 C 114 236, 86 194, 94 136 C 98 98, 118 50, 150 50 Z" fill="#2f4a1a"/>
+  <path d="M150 68 C 172 68, 186 104, 189 138 C 194 182, 174 216, 150 216 C 126 216, 106 182, 111 138 C 114 104, 128 68, 150 68 Z" fill="#c9dc7a"/>
+  <path d="M150 88 C 165 88, 174 114, 176 140 C 179 172, 166 196, 150 196 C 134 196, 121 172, 124 140 C 126 114, 135 88, 150 88 Z" fill="#e6efb2"/>
+  <circle cx="150" cy="160" r="28" fill="#8a5a3b"/>
+  <ellipse cx="140" cy="148" rx="9" ry="5" fill="#fff" opacity=".3" transform="rotate(-30 140 148)"/>
+  <path d="M262 110 C 284 110, 298 144, 300 172 C 304 214, 284 244, 262 244 C 240 244, 220 214, 224 172 C 226 144, 240 110, 262 110 Z" fill="#3d5e22"/>
+  <path d="M250 128 C 242 144, 238 160, 236 178" stroke="#577f31" stroke-width="7" stroke-linecap="round" fill="none"/>
+  <g>
+    <circle cx="74" cy="214" r="30" fill="#2a2d6e"/>
+    <circle cx="72" cy="212" r="30" fill="#3b3f8f"/>
+    <ellipse cx="60" cy="199" rx="9" ry="5" fill="#fff" opacity=".35" transform="rotate(-30 60 199)"/>
+    <path d="M72 188 l4 6 7 1 -5 5 1 7 -7 -3 -7 3 1 -7 -5 -5 7 -1 Z" fill="#1e2050"/>
+  </g>
+  <g>
+    <circle cx="122" cy="252" r="24" fill="#24275f"/>
+    <circle cx="120" cy="250" r="24" fill="#4a4f9e"/>
+    <ellipse cx="111" cy="240" rx="7" ry="4" fill="#fff" opacity=".35" transform="rotate(-30 111 240)"/>
+    <path d="M120 231 l3 5 6 1 -4 4 1 6 -6 -3 -6 3 1 -6 -4 -4 6 -1 Z" fill="#1e2050"/>
+  </g>
+  <g>
+    <circle cx="210" cy="262" r="20" fill="#24275f"/>
+    <circle cx="208" cy="260" r="20" fill="#353a86"/>
+    <ellipse cx="200" cy="252" rx="6" ry="3.5" fill="#fff" opacity=".35" transform="rotate(-30 200 252)"/>
+  </g>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 120" role="img" aria-label="Palta">
+  <path d="M48 14 C 64 14, 74 38, 77 58 C 82 88, 68 110, 48 110 C 28 110, 14 88, 19 58 C 22 38, 32 14, 48 14 Z" fill="#2f4a1a"/>
+  <path d="M48 24 C 59 24, 66 42, 68 59 C 71 82, 62 100, 48 100 C 34 100, 25 82, 28 59 C 30 42, 37 24, 48 24 Z" fill="#c9dc7a"/>
+  <path d="M48 34 C 56 34, 61 48, 62 61 C 64 80, 58 92, 48 92 C 38 92, 32 80, 34 61 C 35 48, 40 34, 48 34 Z" fill="#e6efb2"/>
+  <circle cx="48" cy="72" r="15" fill="#8a5a3b"/>
+  <ellipse cx="43" cy="66" rx="5" ry="3" fill="#fff" opacity=".3" transform="rotate(-30 43 66)"/>
+  <path d="M112 18 C 130 18, 142 44, 144 64 C 148 92, 132 112, 112 112 C 92 112, 76 92, 80 64 C 82 44, 94 18, 112 18 Z" fill="#3d5e22"/>
+  <path d="M104 30 C 98 40, 94 52, 92 64" stroke="#577f31" stroke-width="5" stroke-linecap="round" fill="none"/>
+  <path d="M112 18 C 112 12, 116 8, 122 6" stroke="#6b4a2e" stroke-width="4" stroke-linecap="round" fill="none"/>
+</svg>

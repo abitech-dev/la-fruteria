@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 120" role="img" aria-label="Palta fuerte">
+  <path d="M48 12 C 62 12, 72 34, 76 56 C 82 88, 68 110, 48 110 C 28 110, 14 88, 20 56 C 24 34, 34 12, 48 12 Z" fill="#5f8f2c"/>
+  <path d="M48 20 C 59 20, 67 40, 69 58 C 73 84, 62 102, 48 102 C 34 102, 23 84, 27 58 C 29 40, 37 20, 48 20 Z" fill="#d3e48a"/>
+  <path d="M48 30 C 56 30, 61 46, 62 60 C 65 80, 58 94, 48 94 C 38 94, 31 80, 34 60 C 35 46, 40 30, 48 30 Z" fill="#eef5c4"/>
+  <circle cx="48" cy="72" r="14" fill="#9b6a44"/>
+  <ellipse cx="43" cy="66" rx="5" ry="3" fill="#fff" opacity=".3" transform="rotate(-30 43 66)"/>
+  <path d="M114 14 C 130 14, 140 40, 143 62 C 148 92, 133 112, 114 112 C 95 112, 80 92, 85 62 C 88 40, 98 14, 114 14 Z" fill="#6fa335"/>
+  <path d="M104 30 C 98 42, 94 54, 92 68" stroke="#9cc75a" stroke-width="5" stroke-linecap="round" fill="none"/>
+  <path d="M114 14 C 114 9, 117 6, 122 4" stroke="#6b4a2e" stroke-width="4" stroke-linecap="round" fill="none"/>
+</svg>

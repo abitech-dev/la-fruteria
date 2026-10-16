@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="La Frutería">
+  <path d="M26 12 C 32 4, 42 4, 46 8 C 40 9, 34 12, 29 17 Z" fill="#5b8c2a"/>
+  <circle cx="22" cy="28" r="17" fill="#3b3f8f"/>
+  <ellipse cx="15" cy="21" rx="5" ry="3" fill="#fff" opacity=".35" transform="rotate(-30 15 21)"/>
+  <path d="M22 13 l2.5 4 4.5 .8 -3.2 3.2 .8 4.5 -4.6 -2.2 -4.6 2.2 .8 -4.5 -3.2 -3.2 4.5 -.8 Z" fill="#1e2050"/>
+</svg>
