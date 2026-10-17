@@ -10,6 +10,7 @@ Dice qué gana la tienda en cada capítulo y qué etiqueta de Git marca ese esta
 - Las etiquetas se crean en los laboratorios de cada volumen, cuando su escaleta está cerrada.
   Si la escaleta cambia lo que gana un capítulo, esta hoja se corrige en el mismo cambio.
 - Los títulos de los capítulos mandan en el plan de la colección; aquí van abreviados.
+- Las etiquetas viven en la rama `lector`, que arma la tienda paso a paso, como la construye el lector.
 - La rama `main` guarda la aplicación completa, que llega hasta el volumen 5.
   Lo que piden los volúmenes 6 a 9 se agrega en sus laboratorios.
 
