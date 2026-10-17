@@ -5,7 +5,7 @@ Dice qué gana la tienda en cada capítulo y qué etiqueta de Git marca ese esta
 
 ## Cómo se usa
 
-- Cada capítulo tiene una etiqueta `volNN-capMM`, por ejemplo `vol02-cap03`, que el lector descarga para empezar el laboratorio.
+- Cada capítulo tiene una etiqueta `volNN-capMM`, por ejemplo `vol02-cap03`, que guarda la tienda como queda al terminarlo. El lector empieza cada laboratorio desde la etiqueta del capítulo anterior.
 - Un capítulo «sin cambios» no toca el proyecto; su etiqueta apunta al mismo commit que la anterior.
 - Las etiquetas se crean en los laboratorios de cada volumen, cuando su escaleta está cerrada.
   Si la escaleta cambia lo que gana un capítulo, esta hoja se corrige en el mismo cambio.
