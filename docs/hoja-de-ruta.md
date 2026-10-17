@@ -33,8 +33,8 @@ Dice qué gana la tienda en cada capítulo y qué etiqueta de Git marca ese esta
 | 2 | Instalar Docker | Sin cambios. | `vol01-cap02` |
 | 3 | Imagen y contenedor | Sin cambios. | `vol01-cap03` |
 | 4 | Máquinas virtuales | Sin cambios. | `vol01-cap04` |
-| 5 | Primer servidor web | La vitrina corre en nginx en el puerto 8080, todavía con la página de ejemplo. | `vol01-cap05` |
-| 6 | Vida de un contenedor | La vitrina se reinicia sola tras un fallo. | `vol01-cap06` |
+| 5 | Primer servidor web | Tres vitrinas, `lima`, `sur` y `norte`, corren en nginx en `127.0.0.1`, puertos 8081 a 8083, todavía con la página de ejemplo. | `vol01-cap05` |
+| 6 | Vida de un contenedor | La vitrina de Lima vuelve sola cuando Docker reinicia, con `unless-stopped`. | `vol01-cap06` |
 | 7 | Mirar dentro | Sin cambios. | `vol01-cap07` |
 | 8 | Limpieza | Sin cambios. | `vol01-cap08` |
 | 9 | Quién mueve las cajas | Sin cambios. | `vol01-cap09` |
