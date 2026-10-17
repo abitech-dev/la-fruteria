@@ -45,9 +45,9 @@ Dice qué gana la tienda en cada capítulo y qué etiqueta de Git marca ese esta
 | --- | --- | --- | --- |
 | 1 | Capas | Sin cambios. | `vol02-cap01` |
 | 2 | Etiquetas y digests | La imagen de nginx fijada por digest. | `vol02-cap02` |
-| 3 | Primer Dockerfile | La vitrina compilada con `npm run build` y servida por nginx en su propia imagen. | `vol02-cap03` |
-| 4 | Contexto y `.dockerignore` | El `.dockerignore` deja fuera `node_modules` y `dist`. | `vol02-cap04` |
-| 5 | Instrucciones que confunden | La API de pedidos en su imagen, con los pedidos en memoria y el usuario `node`. | `vol02-cap05` |
+| 3 | Primer Dockerfile | La vitrina compilada y servida dentro de una imagen de Node, todavía pesada, porque el lector solo tiene Docker. | `vol02-cap03` |
+| 4 | Contexto y `.dockerignore` | El `.dockerignore` deja fuera `node_modules`, `dist` y los archivos de claves. | `vol02-cap04` |
+| 5 | Instrucciones que confunden | La API de pedidos en su imagen, con los pedidos en un archivo dentro de la caja y el usuario `node`. | `vol02-cap05` |
 | 6 | Caché de capas | El Dockerfile de la API copia primero las dependencias. | `vol02-cap06` |
 | 7 | Multietapa | La vitrina en dos etapas, Node compila y nginx sirve; la API, sin herramientas de compilación. | `vol02-cap07` |
 | 8 | Imágenes a dieta | La API sobre Alpine, comparada con slim y distroless. | `vol02-cap08` |
