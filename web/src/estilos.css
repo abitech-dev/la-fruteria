@@ -1,0 +1,505 @@
+@font-face {
+  font-family: "Plantilla";
+  src: url("/fuentes/plantilla.woff2") format("woff2");
+  font-weight: 800;
+  font-display: optional;
+}
+
+@font-face {
+  font-family: "Texto";
+  src: url("/fuentes/texto.woff2") format("woff2");
+  font-weight: 200 800;
+  font-display: optional;
+}
+
+@font-face {
+  font-family: "Codigo";
+  src: url("/fuentes/codigo.woff2") format("woff2");
+  font-weight: 200 800;
+  font-display: optional;
+}
+
+:root { --escarcha: #f2f4f8; --tarjeta: #ffffff; --tinta: #15172e; --tenue: #565b78; }
+:root { --arandano: #2b2f6b; --cera: #8a90c9; --pulpa: #d7e49a; --cascara: #22351a; }
+:root { --linea: #dfe2ec; --alerta: #b3261e; --boton-fondo: #2b2f6b; --boton-texto: #ffffff; }
+:root { --fondo-arandanos: #e6e7f4; --fondo-paltas: #e8efcf; --fondo-cajas: #efe4d6; }
+:root { --sombra: 0 1px 2px rgb(21 23 46 / 6%), 0 12px 32px rgb(21 23 46 / 8%); }
+:root { --radio: 1rem; --ancho: 74rem; --rapido: 160ms ease; }
+:root { color-scheme: light; scrollbar-color: var(--cera) var(--escarcha); }
+
+@media (prefers-color-scheme: dark) {
+  :root { --escarcha: #10122a; --tarjeta: #191c3a; --tinta: #eceef8; --tenue: #a9aecb; }
+  :root { --linea: #2c3058; --alerta: #ff9a8f; --boton-fondo: #d7e49a; --boton-texto: #22351a; }
+  :root { --fondo-arandanos: #22254a; --fondo-paltas: #24301a; --fondo-cajas: #33281d; }
+  :root { --sombra: 0 1px 2px rgb(0 0 0 / 35%), 0 12px 32px rgb(0 0 0 / 35%); }
+  :root { color-scheme: dark; scrollbar-color: #3a3f78 var(--escarcha); }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scrollbar-width: thin;
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+}
+
+body {
+  margin: 0;
+  background: var(--escarcha);
+  color: var(--tinta);
+  font-family: "Texto", system-ui, sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.55;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+h2,
+h3 {
+  line-height: 1.2;
+}
+
+.saltar {
+  position: absolute;
+  top: -4rem;
+  left: 1rem;
+  z-index: 30;
+  padding: 0.6rem 1.1rem;
+  border-radius: 999px;
+  background: var(--boton-fondo);
+  color: var(--boton-texto);
+  font-weight: 700;
+}
+
+.saltar:focus {
+  top: 1rem;
+}
+
+:focus-visible {
+  outline: 2px solid var(--cera);
+  outline-offset: 2px;
+}
+
+/* Letra de plantilla, como la pintura de las cajas. */
+.plantilla {
+  font-family: "Plantilla", "Arial Narrow", sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.barra-superior {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem max(1rem, calc((100% - var(--ancho)) / 2));
+  background: color-mix(in srgb, var(--arandano) 94%, transparent);
+  backdrop-filter: blur(14px);
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--pulpa);
+  text-decoration: none;
+}
+
+.marca img,
+.pie-logo {
+  padding: 0.2rem;
+  border-radius: 50%;
+  background: var(--pulpa);
+}
+
+.marca-nombre {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.portada {
+  background: var(--arandano);
+  color: #fff;
+}
+
+.portada-contenido {
+  display: grid;
+  align-items: center;
+  gap: 2rem;
+  max-width: var(--ancho);
+  margin: 0 auto;
+  padding: 2rem 1rem 2.5rem;
+}
+
+.etiqueta {
+  margin: 0 0 1rem;
+  color: #c9ccef;
+  font-family: "Codigo", ui-monospace, monospace;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.portada h1 {
+  margin: 0 0 1.25rem;
+  color: var(--pulpa);
+  font-size: clamp(2.6rem, 6.5vw, 4.75rem);
+  line-height: 0.92;
+}
+
+.bajada {
+  max-width: 32rem;
+  margin: 0 0 2rem;
+  color: #d8daf2;
+  font-size: 1.2rem;
+}
+
+.portada-figura {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(100%, 24rem);
+  aspect-ratio: 1;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 45%, #eef4c8 0 45%, var(--pulpa) 46% 70%, #b9cc6d 71%);
+}
+
+.portada-figura img {
+  width: 86%;
+}
+
+/* Sello de inspección de las cajas de exportación. */
+.sello {
+  position: absolute;
+  top: -0.5rem;
+  left: -0.75rem;
+  width: 7.5rem;
+  color: var(--pulpa);
+  font-family: "Plantilla", sans-serif;
+  font-weight: 800;
+  transform: rotate(-14deg);
+  animation: sellar 700ms cubic-bezier(0.2, 0.8, 0.2, 1) 250ms both;
+}
+
+@keyframes sellar {
+  from {
+    opacity: 0;
+    transform: rotate(-40deg) scale(1.8);
+  }
+}
+
+@media (min-width: 52rem) {
+  .portada-contenido {
+    grid-template-columns: 1.15fr 1fr;
+    padding-top: 3.5rem;
+  }
+}
+
+/* En el celular, menos alto antes del catálogo. */
+@media (max-width: 51.99rem) {
+  .portada-figura {
+    width: min(100%, 15rem);
+  }
+
+  .sello {
+    width: 5.5rem;
+  }
+
+  .producto-imagen {
+    height: 7.5rem;
+  }
+
+  .producto-imagen img {
+    width: 8rem;
+  }
+}
+
+.boton {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.5rem;
+  border: 1px solid var(--linea);
+  border-radius: 999px;
+  background: var(--tarjeta);
+  color: var(--tinta);
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform var(--rapido), filter var(--rapido);
+}
+
+.boton:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+}
+
+.boton-claro {
+  border-color: var(--pulpa);
+  background: var(--pulpa);
+  color: var(--cascara);
+}
+
+.tienda {
+  display: grid;
+  align-items: start;
+  gap: 2rem;
+  max-width: var(--ancho);
+  margin: 0 auto;
+  padding: 2.5rem 1rem 3.5rem;
+}
+
+.catalogo-cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: end;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.catalogo-cabecera h2 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.filtro {
+  padding: 0.45rem 1rem;
+  border: 1px solid var(--linea);
+  border-radius: 999px;
+  background: var(--tarjeta);
+  color: var(--tinta);
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.filtro[aria-pressed="true"] {
+  border-color: var(--boton-fondo);
+  background: var(--boton-fondo);
+  color: var(--boton-texto);
+}
+
+.productos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15.5rem, 1fr));
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.producto {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--linea);
+  border-radius: var(--radio);
+  background: var(--tarjeta);
+  box-shadow: var(--sombra);
+  transition: transform var(--rapido), box-shadow var(--rapido);
+}
+
+.producto:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 2px 4px rgb(21 23 46 / 6%), 0 18px 40px rgb(21 23 46 / 14%);
+}
+
+.producto-imagen {
+  display: grid;
+  place-items: center;
+  height: 10rem;
+  background: var(--fondo-paltas);
+}
+
+.producto.arandanos .producto-imagen {
+  background: var(--fondo-arandanos);
+}
+
+.producto.cajas .producto-imagen {
+  background: var(--fondo-cajas);
+}
+
+.producto-imagen img {
+  width: 10.5rem;
+  transition: transform 300ms ease;
+}
+
+.producto:hover .producto-imagen img {
+  transform: scale(1.06) rotate(-2deg);
+}
+
+/* Rótulo como la etiqueta de una caja de exportación. */
+.rotulo {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.45rem 1rem;
+  border-top: 2px dashed var(--linea);
+  color: var(--tenue);
+  font-family: "Codigo", ui-monospace, monospace;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+}
+
+.rotulo .plantilla {
+  color: var(--tinta);
+  font-size: 0.95rem;
+}
+
+.producto-cuerpo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.2rem 1rem 1rem;
+}
+
+.producto h3 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.unidad {
+  margin: 0 0 0.75rem;
+  color: var(--tenue);
+  font-size: 0.85rem;
+}
+
+.producto-pie {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+.precio {
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.esqueleto {
+  height: 21rem;
+  background: linear-gradient(100deg, var(--tarjeta) 30%, var(--linea) 50%, var(--tarjeta) 70%);
+  background-size: 300% 100%;
+  animation: brillo 1.4s linear infinite;
+}
+
+@keyframes brillo {
+  to {
+    background-position: -100% 0;
+  }
+}
+
+.aviso:empty {
+  display: none;
+}
+
+.aviso .boton {
+  margin-left: 0.75rem;
+  padding: 0.4rem 1rem;
+}
+
+.nota {
+  margin: 0 0 1rem;
+  color: var(--tenue);
+}
+
+.aviso {
+  margin: 0 0 1rem;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  background: var(--tarjeta);
+  color: var(--alerta);
+  font-weight: 700;
+}
+
+.pie {
+  background: var(--cascara);
+  color: #e9efc8;
+}
+
+.pie-contenido {
+  display: grid;
+  gap: 2rem;
+  max-width: var(--ancho);
+  margin: 0 auto;
+  padding: 3rem 1rem 2rem;
+}
+
+.pie-nombre {
+  margin: 0.75rem 0 0.25rem;
+  color: var(--pulpa);
+  font-size: 1.6rem;
+}
+
+.pie-descripcion {
+  max-width: 22rem;
+  margin: 0;
+}
+
+.pie-titulo {
+  margin: 0 0 0.75rem;
+  color: var(--pulpa);
+  font-family: "Codigo", ui-monospace, monospace;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pie-lista {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pie-credito {
+  max-width: var(--ancho);
+  margin: 0 auto;
+  padding: 1.25rem 1rem 1.5rem;
+  border-top: 1px solid rgb(233 239 200 / 15%);
+  color: #b9c39a;
+  font-size: 0.9rem;
+}
+
+@media (min-width: 52rem) {
+  .pie-contenido {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

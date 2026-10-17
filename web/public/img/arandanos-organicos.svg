@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 120" role="img" aria-label="Arándanos orgánicos">
+  <path d="M72 30 C 84 14, 108 12, 120 20 C 106 22, 92 30, 80 40 Z" fill="#5b8c2a"/>
+  <path d="M72 30 C 62 16, 42 14, 32 22 C 46 24, 58 32, 68 40 Z" fill="#79a83c"/>
+  <circle cx="44" cy="72" r="24" fill="#2a2d6e"/>
+  <circle cx="42" cy="70" r="24" fill="#3b3f8f"/>
+  <ellipse cx="32" cy="60" rx="7" ry="4" fill="#fff" opacity=".35" transform="rotate(-30 32 60)"/>
+  <circle cx="94" cy="76" r="26" fill="#2a2d6e"/>
+  <circle cx="92" cy="74" r="26" fill="#4a4f9e"/>
+  <ellipse cx="81" cy="63" rx="8" ry="4.5" fill="#fff" opacity=".35" transform="rotate(-30 81 63)"/>
+  <circle cx="68" cy="92" r="20" fill="#24275f"/>
+  <circle cx="66" cy="90" r="20" fill="#353a86"/>
+  <circle cx="132" cy="34" r="20" fill="#4f7a28"/>
+  <circle cx="132" cy="34" r="16" fill="none" stroke="#e6efb2" stroke-width="2"/>
+  <path d="M124 42 C 124 30, 132 24, 142 24 C 142 34, 136 42, 124 42 Z" fill="#e6efb2"/>
+  <path d="M125 41 L 136 30" stroke="#4f7a28" stroke-width="2" stroke-linecap="round"/>
+</svg>

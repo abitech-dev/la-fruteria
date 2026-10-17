@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 120" role="img" aria-label="Bandeja de arándanos">
+  <rect x="28" y="40" width="104" height="62" rx="10" fill="#dfe6f2"/>
+  <circle cx="50" cy="62" r="13" fill="#3b3f8f"/>
+  <circle cx="75" cy="58" r="14" fill="#4a4f9e"/>
+  <circle cx="101" cy="61" r="13" fill="#353a86"/>
+  <circle cx="62" cy="80" r="13" fill="#2f3380"/>
+  <circle cx="89" cy="81" r="13" fill="#3b3f8f"/>
+  <circle cx="113" cy="80" r="11" fill="#4a4f9e"/>
+  <ellipse cx="45" cy="56" rx="4" ry="2.5" fill="#fff" opacity=".35"/>
+  <ellipse cx="70" cy="52" rx="4" ry="2.5" fill="#fff" opacity=".35"/>
+  <ellipse cx="84" cy="75" rx="4" ry="2.5" fill="#fff" opacity=".35"/>
+  <rect x="28" y="40" width="104" height="62" rx="10" fill="#ffffff" opacity=".28"/>
+  <rect x="28" y="40" width="104" height="62" rx="10" fill="none" stroke="#8fa3c4" stroke-width="3"/>
+  <path d="M30 48 H130" stroke="#8fa3c4" stroke-width="2" opacity=".7"/>
+  <path d="M40 36 C 40 30, 44 28, 50 28 H110 C 116 28, 120 30, 120 36" fill="none" stroke="#8fa3c4" stroke-width="3" stroke-linecap="round"/>
+</svg>

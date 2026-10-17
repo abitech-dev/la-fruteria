@@ -1,0 +1,50 @@
+[
+  {
+    "codigo": "ARA-125",
+    "nombre": "Arándanos frescos",
+    "unidad": "bandeja de 125 g",
+    "origen": "Virú, La Libertad",
+    "imagen": "bandeja.svg",
+    "precio_centimos": 650
+  },
+  {
+    "codigo": "ARA-500",
+    "nombre": "Arándanos frescos",
+    "unidad": "caja de 500 g",
+    "origen": "Virú, La Libertad",
+    "imagen": "arandanos.svg",
+    "precio_centimos": 2200
+  },
+  {
+    "codigo": "ARA-ORG",
+    "nombre": "Arándanos orgánicos",
+    "unidad": "caja de 500 g",
+    "origen": "Virú, La Libertad",
+    "imagen": "arandanos-organicos.svg",
+    "precio_centimos": 2800
+  },
+  {
+    "codigo": "PAL-HAS",
+    "nombre": "Palta Hass",
+    "unidad": "kilo",
+    "origen": "Huánuco",
+    "imagen": "palta-hass.svg",
+    "precio_centimos": 990
+  },
+  {
+    "codigo": "PAL-FUE",
+    "nombre": "Palta fuerte",
+    "unidad": "kilo",
+    "origen": "Huánuco",
+    "imagen": "palta-fuerte.svg",
+    "precio_centimos": 850
+  },
+  {
+    "codigo": "MIX-001",
+    "nombre": "Caja mixta",
+    "unidad": "caja de 1,5 kg",
+    "origen": "Virú y Huánuco",
+    "imagen": "caja.svg",
+    "precio_centimos": 2990
+  }
+]
