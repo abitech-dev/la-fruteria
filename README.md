@@ -83,3 +83,10 @@ docker run --rm --network la-fruteria_frente \
 | `docs/` | La [hoja de ruta](docs/hoja-de-ruta.md): qué gana la tienda en cada capítulo del libro. |
 
 Las fuentes de `web/public/fuentes/` tienen licencia SIL Open Font License.
+
+## Autor y licencia
+
+La Frutería la escribió Abimael Epifanio Fernandez Ventura para la colección «Contenedores con peras y manzanas».
+Si quieres escribirle, su correo es <abimaelfv@hotmail.com>.
+
+El código tiene licencia MIT, que está en [LICENSE](LICENSE).
