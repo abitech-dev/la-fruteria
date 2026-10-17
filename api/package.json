@@ -1,0 +1,17 @@
+{
+  "name": "la-fruteria-api",
+  "version": "1.0.0",
+  "description": "API de pedidos de La Frutería.",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node src/servidor.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "express": "5.3.0"
+  }
+}
