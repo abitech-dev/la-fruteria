@@ -1,0 +1,16 @@
+FROM node:24-slim@sha256:a5f4366e834695d5f363b920c104953a535d3a9864d1bdf74566a0ebe01daee5 AS dependencias
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev
+RUN mkdir datos
+
+FROM gcr.io/distroless/nodejs24-debian12@sha256:61f4f4341db81820c24ce771b83d202eb6452076f58628cd536cc7d94a10978b
+ENV NODE_ENV=production
+WORKDIR /app
+COPY --from=dependencias /app/node_modules ./node_modules
+COPY --from=dependencias --chown=nonroot /app/datos ./datos
+COPY package.json productos.json ./
+COPY src ./src
+USER nonroot
+EXPOSE 3000
+CMD ["src/servidor.js"]
