@@ -17,10 +17,9 @@ Si te pierdes, compara tu trabajo con la etiqueta del capítulo, como en `git di
 
 ## Pruebas
 
-Las pruebas también corren en contenedores. En Git Bash para Windows, antepón `MSYS_NO_PATHCONV=1` a cada comando.
+Las pruebas de la API también corren en un contenedor. En Git Bash para Windows, antepón `MSYS_NO_PATHCONV=1` al comando.
 
 ```bash
-docker run --rm -v "$PWD:/repo:ro" -w /repo node:24-alpine node --test "pruebas/*.test.mjs"
 docker run --rm -v "$PWD/api:/app" -v /app/node_modules -w /app node:24-alpine sh -c "npm ci && npm test"
 ```
 

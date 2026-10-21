@@ -7,9 +7,8 @@ FROM node:24-alpine@sha256:44fce696f38ba8c987c4db89954051000bbd05ffd8d8659ba15ed
 ENV NODE_ENV=production
 WORKDIR /app
 COPY --from=dependencias /app/node_modules ./node_modules
-COPY package.json productos.json ./
+COPY package.json ./
 COPY src ./src
-RUN mkdir datos && chown node:node datos
 USER node
 EXPOSE 3000
 CMD ["node", "src/servidor.js"]

@@ -1,7 +1,10 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, nextTick, onMounted, ref, watch } from 'vue';
+import DialogoDeCompra from './componentes/DialogoDeCompra.vue';
+import DialogoDeSeguimiento from './componentes/DialogoDeSeguimiento.vue';
+import PanelDelPedido from './componentes/PanelDelPedido.vue';
 import TarjetaProducto from './componentes/TarjetaProducto.vue';
-import { CIUDADES, cargarCatalogo, familiaDe, tienda } from './tienda.js';
+import { CIUDADES, cargarCatalogo, familiaDe, soles, tienda, totalCentimos, unidades } from './tienda.js';
 
 const FILTROS = [
   { familia: 'todo', nombre: 'Todo' },
@@ -9,29 +12,81 @@ const FILTROS = [
   { familia: 'paltas', nombre: 'Paltas' },
   { familia: 'cajas', nombre: 'Cajas' },
 ];
+const escritorio = window.matchMedia('(min-width: 64rem)');
 
 const filtro = ref('todo');
+const isHojaAbierta = ref(false);
+const panel = ref();
+const compra = ref();
+const seguimiento = ref();
+let disparador = null;
 
 const visibles = computed(() =>
   tienda.productos.filter((producto) => filtro.value === 'todo' || familiaDe(producto.codigo) === filtro.value),
 );
 const isCargando = computed(() => tienda.productos.length === 0 && !tienda.isCatalogoConError);
 
+async function abrirPedido(evento) {
+  disparador = evento.currentTarget;
+  if (escritorio.matches) {
+    panel.value.enfocar();
+    return;
+  }
+  isHojaAbierta.value = true;
+  await nextTick();
+  panel.value.enfocarCierre();
+}
+
+// Espera a que Vue quite el inert para devolver el foco.
+async function cerrarPedido({ isFocoDeVuelta = true } = {}) {
+  if (!isHojaAbierta.value) return;
+  isHojaAbierta.value = false;
+  await nextTick();
+  if (isFocoDeVuelta) disparador?.focus();
+}
+
+function comprar() {
+  cerrarPedido({ isFocoDeVuelta: false });
+  compra.value.abrir();
+}
+
+function seguirPedido(codigo) {
+  compra.value.cerrar();
+  seguimiento.value.abrir(codigo);
+}
+
+watch(isHojaAbierta, (isAbierta) => document.body.classList.toggle('con-hoja', isAbierta));
+escritorio.addEventListener('change', () => cerrarPedido({ isFocoDeVuelta: false }));
+document.addEventListener('keydown', (evento) => evento.key === 'Escape' && cerrarPedido());
 onMounted(cargarCatalogo);
 </script>
 
 <template>
   <a class="saltar" href="#catalogo">Ir al catálogo</a>
 
-  <header class="barra-superior">
+  <header class="barra-superior" :inert="isHojaAbierta">
     <a class="marca" href="#inicio">
       <img src="/img/logo.svg" alt="" width="40" height="40">
       <span class="marca-nombre plantilla">La Frutería</span>
     </a>
+    <div class="acciones-superiores">
+      <button type="button" class="boton-seguir" aria-haspopup="dialog" @click="seguimiento.abrir()">
+        Seguir pedido
+      </button>
+      <button
+        type="button"
+        class="boton-carrito"
+        aria-controls="pedido"
+        :aria-expanded="isHojaAbierta"
+        @click="abrirPedido"
+      >
+        Tu pedido <span id="contador-carrito" :key="unidades" class="contador">{{ unidades }}</span>
+      </button>
+    </div>
   </header>
 
   <main id="inicio">
-    <section class="portada">
+    <section class="portada" :inert="isHojaAbierta">
       <div class="portada-contenido">
         <div>
           <p class="etiqueta">Arándanos de Virú · Paltas de Huánuco</p>
@@ -40,7 +95,7 @@ onMounted(cargarCatalogo);
             Fruta seleccionada a mano y despachada a tu puerta en {{ CIUDADES.slice(0, -1).join(', ') }}
             y {{ CIUDADES.at(-1) }}.
           </p>
-          <a class="boton boton-claro" href="#catalogo">Ver la fruta</a>
+          <a class="boton boton-claro" href="#catalogo">Elegir fruta</a>
         </div>
         <div class="portada-figura">
           <img src="/img/portada.svg" alt="" width="360" height="300">
@@ -60,39 +115,65 @@ onMounted(cargarCatalogo);
           </svg>
         </div>
       </div>
+      <ol class="pasos">
+        <li><span><strong>Eliges tu fruta</strong> del catálogo de la semana.</span></li>
+        <li><span><strong>Recibes un código</strong> al hacer el pedido.</span></li>
+        <li><span><strong>Sigues tu pedido</strong> hasta que sale del almacén.</span></li>
+      </ol>
     </section>
 
-    <section id="catalogo" class="catalogo tienda" aria-labelledby="titulo-catalogo">
-      <div class="catalogo-cabecera">
-        <h2 id="titulo-catalogo">Catálogo</h2>
-        <div class="filtros" role="group" aria-label="Mostrar">
-          <button
-            v-for="opcion in FILTROS"
-            :key="opcion.familia"
-            type="button"
-            class="filtro"
-            :aria-pressed="filtro === opcion.familia"
-            @click="filtro = opcion.familia"
-          >{{ opcion.nombre }}</button>
+    <div class="tienda">
+      <section id="catalogo" class="catalogo" aria-labelledby="titulo-catalogo" :inert="isHojaAbierta">
+        <div class="catalogo-cabecera">
+          <h2 id="titulo-catalogo">Catálogo</h2>
+          <div class="filtros" role="group" aria-label="Mostrar">
+            <button
+              v-for="opcion in FILTROS"
+              :key="opcion.familia"
+              type="button"
+              class="filtro"
+              :aria-pressed="filtro === opcion.familia"
+              @click="filtro = opcion.familia"
+            >{{ opcion.nombre }}</button>
+          </div>
         </div>
-      </div>
-      <p class="nota">Muy pronto podrás hacer tu pedido en línea.</p>
-      <p id="estado-catalogo" class="aviso" role="status">
-        <template v-if="tienda.isCatalogoConError">
-          No pudimos cargar el catálogo.
-          <button type="button" class="boton" @click="cargarCatalogo">Reintentar</button>
-        </template>
-      </p>
-      <ul id="productos" class="productos" :aria-busy="isCargando">
-        <template v-if="isCargando">
-          <li v-for="numero in 3" :key="numero" class="producto esqueleto" aria-hidden="true" />
-        </template>
-        <TarjetaProducto v-for="producto in visibles" :key="producto.codigo" :producto="producto" />
-      </ul>
-    </section>
+        <p id="estado-catalogo" class="aviso" role="status">
+          <template v-if="tienda.isCatalogoConError">
+            No pudimos cargar el catálogo.
+            <button type="button" class="boton" @click="cargarCatalogo">Reintentar</button>
+          </template>
+        </p>
+        <ul id="productos" class="productos" :aria-busy="isCargando">
+          <template v-if="isCargando">
+            <li v-for="numero in 3" :key="numero" class="producto esqueleto" aria-hidden="true" />
+          </template>
+          <TarjetaProducto v-for="producto in visibles" :key="producto.codigo" :producto="producto" />
+        </ul>
+      </section>
+
+      <PanelDelPedido ref="panel" :abierta="isHojaAbierta" @cerrar="cerrarPedido()" @comprar="comprar" />
+    </div>
   </main>
 
-  <footer class="pie">
+  <button
+    v-if="unidades > 0"
+    id="barra-pedido"
+    type="button"
+    class="barra-pedido"
+    aria-controls="pedido"
+    :aria-expanded="isHojaAbierta"
+    :inert="isHojaAbierta"
+    @click="abrirPedido"
+  >
+    <span>{{ unidades === 1 ? '1 producto' : `${unidades} productos` }}</span>
+    <span>Ver pedido · <strong :key="totalCentimos" class="latido">{{ soles(totalCentimos) }}</strong></span>
+  </button>
+  <div v-if="isHojaAbierta" class="velo" @click="cerrarPedido()" />
+
+  <DialogoDeCompra ref="compra" @seguir="seguirPedido" />
+  <DialogoDeSeguimiento ref="seguimiento" />
+
+  <footer class="pie" :inert="isHojaAbierta">
     <div class="pie-contenido">
       <div>
         <img class="pie-logo" src="/img/logo.svg" alt="" width="44" height="44">
@@ -103,6 +184,17 @@ onMounted(cargarCatalogo);
         <h2 class="pie-titulo">Despachamos a</h2>
         <ul class="pie-lista">
           <li v-for="ciudad in CIUDADES" :key="ciudad">{{ ciudad }}</li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="pie-titulo">Tu pedido</h2>
+        <ul class="pie-lista">
+          <li><a class="enlace" href="#catalogo">Elegir fruta</a></li>
+          <li>
+            <button type="button" class="enlace" aria-haspopup="dialog" @click="seguimiento.abrir()">
+              Seguir un pedido
+            </button>
+          </li>
         </ul>
       </div>
     </div>
