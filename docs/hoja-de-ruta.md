@@ -59,12 +59,12 @@ Dice qué gana la tienda en cada capítulo y qué etiqueta de Git marca ese esta
 
 | Cap. | Tema | La Frutería gana | Etiqueta |
 | --- | --- | --- | --- |
-| 1 | La capa escribible | Sin cambios; los pedidos en memoria se pierden al reiniciar. | `vol03-cap01` |
-| 2 | Volúmenes con nombre | PostgreSQL con su volumen; la API guarda ahí los pedidos. | `vol03-cap02` |
-| 3 | Bind mounts y tmpfs | El esquema se carga desde `base-de-datos/` y la vitrina se edita en vivo. | `vol03-cap03` |
-| 4 | Copias de seguridad | Un script de copia y restauración de PostgreSQL. | `vol03-cap04` |
-| 5 | Redes bridge | Una red propia para la API y la base de datos. | `vol03-cap05` |
-| 6 | DNS interno | La API encuentra a `postgres` por su nombre. | `vol03-cap06` |
+| 1 | La capa escribible | Sin cambios; los pedidos del archivo sobreviven a `docker restart` y se pierden con `docker rm`. | `vol03-cap01` |
+| 2 | Volúmenes con nombre | Sin cambios en el repositorio; los pedidos van en el volumen `pedidos`. | `vol03-cap02` |
+| 3 | Bind mounts y tmpfs | Sin cambios en el repositorio; la vitrina se edita en vivo con Vite y la carpeta `web` montada. | `vol03-cap03` |
+| 4 | Copias de seguridad | Sin cambios en el repositorio; el volumen `pedidos` se copia a un archivo y se restaura con sus permisos. | `vol03-cap04` |
+| 5 | Redes bridge | Sin cambios en el repositorio; la vitrina y la API en la red `fruteria`. | `vol03-cap05` |
+| 6 | DNS interno | PostgreSQL con su volumen y el esquema de `base-de-datos/`. La API lo encuentra por `postgres`, y la vitrina, con la compra completa, llega a la API por `api`. | `vol03-cap06` |
 | 7 | Publicar puertos | Solo la vitrina publica un puerto, en `127.0.0.1`. | `vol03-cap07` |
 | 8 | Otros tipos de red | Sin cambios. | `vol03-cap08` |
 | 9 | Depurar redes | Sin cambios. | `vol03-cap09` |
