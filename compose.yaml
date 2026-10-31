@@ -1,0 +1,26 @@
+services:
+  web:
+    build: ./web
+    ports:
+      - "127.0.0.1:8080:8080"
+    depends_on:
+      - api
+
+  api:
+    build: ./api
+    environment:
+      BD_CLAVE: clave-de-prueba
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:18-alpine@sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873
+    environment:
+      POSTGRES_USER: fruteria
+      POSTGRES_PASSWORD: clave-de-prueba
+    volumes:
+      - datos-postgres:/var/lib/postgresql
+      - ./base-de-datos:/docker-entrypoint-initdb.d:ro
+
+volumes:
+  datos-postgres:
