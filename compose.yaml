@@ -1,8 +1,12 @@
+name: la-fruteria
+
 services:
   web:
     build: ./web
     ports:
       - "127.0.0.1:8080:8080"
+    networks:
+      - frente
     depends_on:
       - api
 
@@ -10,6 +14,9 @@ services:
     build: ./api
     environment:
       BD_CLAVE: clave-de-prueba
+    networks:
+      - frente
+      - fondo
     depends_on:
       - postgres
 
@@ -21,6 +28,12 @@ services:
     volumes:
       - datos-postgres:/var/lib/postgresql
       - ./base-de-datos:/docker-entrypoint-initdb.d:ro
+    networks:
+      - fondo
+
+networks:
+  frente:
+  fondo:
 
 volumes:
   datos-postgres:
