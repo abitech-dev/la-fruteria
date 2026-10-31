@@ -51,5 +51,9 @@ export function crearAlmacen(pool) {
       );
       return rows[0] ?? null;
     },
+
+    async comprobar() {
+      await pool.query('SELECT 1');
+    },
   };
 }

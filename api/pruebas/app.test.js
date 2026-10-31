@@ -32,6 +32,10 @@ function crearFalsos() {
       const pedido = estado.guardados.find((guardado) => guardado.codigo === codigo);
       return pedido ? { codigo, estado: 'recibido', total_centimos: pedido.total_centimos } : null;
     },
+    async comprobar() {
+      estado.comprobaciones = (estado.comprobaciones ?? 0) + 1;
+      if (estado.isBaseCaida) throw new Error('sin conexión');
+    },
   };
   return { estado, almacen, registrar: () => {} };
 }
@@ -138,6 +142,36 @@ describe('errores', () => {
       assert.equal(respuesta.status, 500);
       assert.doesNotMatch(texto, /datos|at /);
       assert.equal(respuesta.headers.get('x-powered-by'), null);
+    });
+  });
+});
+
+describe('salud', () => {
+  it('responde vivo sin consultar la base de datos', async () => {
+    const falsos = crearFalsos();
+    await conServidor(falsos, async (pedir) => {
+      const respuesta = await pedir('/salud/vivo');
+      assert.equal(respuesta.status, 200);
+      assert.deepEqual(await respuesta.json(), { estado: 'vivo' });
+    });
+    assert.equal(falsos.estado.comprobaciones, undefined);
+  });
+
+  it('responde listo cuando la base de datos contesta', async () => {
+    await conServidor(crearFalsos(), async (pedir) => {
+      const respuesta = await pedir('/salud/listo');
+      assert.equal(respuesta.status, 200);
+      assert.deepEqual(await respuesta.json(), { estado: 'listo' });
+    });
+  });
+
+  it('responde 503 cuando la base de datos no contesta', async () => {
+    const falsos = crearFalsos();
+    falsos.estado.isBaseCaida = true;
+    await conServidor(falsos, async (pedir) => {
+      const respuesta = await pedir('/salud/listo');
+      assert.equal(respuesta.status, 503);
+      assert.deepEqual(await respuesta.json(), { estado: 'no listo' });
     });
   });
 });

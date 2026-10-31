@@ -39,6 +39,18 @@ export function crearApp({ almacen, registrar }) {
     respuesta.json(pedido);
   });
 
+  app.get('/salud/vivo', (_solicitud, respuesta) => respuesta.json({ estado: 'vivo' }));
+
+  app.get('/salud/listo', async (_solicitud, respuesta) => {
+    try {
+      await almacen.comprobar();
+      respuesta.json({ estado: 'listo' });
+    } catch (error) {
+      registrar('warn', 'no está lista', { motivo: error.message });
+      respuesta.status(503).json({ estado: 'no listo' });
+    }
+  });
+
   app.use((_solicitud, respuesta) => respuesta.status(404).json({ error: 'No existe esa ruta.' }));
   app.use(responderError(registrar));
   return app;
