@@ -1,5 +1,33 @@
 # Compose suma este archivo solo cuando está en la carpeta. Es para desarrollar.
 services:
+  web:
+    build:
+      context: ./web
+      target: compilacion
+    command: ["node_modules/.bin/vite", "--host", "0.0.0.0"]
+    ports: !override
+      - "127.0.0.1:5173:5173"
+    environment:
+      API_URL: http://api:3000
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:5173/"]
+    develop:
+      watch:
+        - action: sync
+          path: ./web/src
+          target: /app/src
+        - action: rebuild
+          path: ./web/package.json
+
+  api:
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./api/src
+          target: /app/src
+        - action: rebuild
+          path: ./api/package.json
+
   postgres:
     ports:
       - "127.0.0.1:5432:5432"
