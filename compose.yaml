@@ -50,6 +50,22 @@ services:
       <<: *salud
       test: ["CMD", "pg_isready", "-U", "fruteria", "-d", "fruteria"]
 
+  # Una consola de PostgreSQL que solo arranca con --profile herramientas.
+  psql:
+    image: postgres:18-alpine@sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873
+    profiles: ["herramientas"]
+    environment:
+      PGHOST: postgres
+      PGUSER: fruteria
+      PGDATABASE: fruteria
+      PGPASSWORD: ${BD_CLAVE:?Falta BD_CLAVE en el archivo .env}
+    networks:
+      - fondo
+    depends_on:
+      postgres:
+        condition: service_healthy
+    entrypoint: ["psql"]
+
 networks:
   frente:
   fondo:

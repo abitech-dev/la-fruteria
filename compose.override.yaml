@@ -1,0 +1,5 @@
+# Compose suma este archivo solo cuando está en la carpeta. Es para desarrollar.
+services:
+  postgres:
+    ports:
+      - "127.0.0.1:5432:5432"
