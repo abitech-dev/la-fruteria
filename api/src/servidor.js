@@ -1,14 +1,11 @@
-import pg from 'pg';
-import { crearAlmacen } from './almacen.js';
 import { crearApp } from './app.js';
 import { leerConfig } from './config.js';
+import { conectar } from './conexiones.js';
 import { registrar } from './registro.js';
 
 const config = leerConfig();
-const pool = new pg.Pool(config.baseDeDatos);
-pool.on('error', (error) => registrar('error', 'conexión con PostgreSQL', { motivo: error.message }));
-
-const servidor = crearApp({ almacen: crearAlmacen(pool), registrar }).listen(config.puerto, () => {
+const { almacen, cola, cerrar } = await conectar(config, registrar);
+const servidor = crearApp({ almacen, cola, registrar }).listen(config.puerto, () => {
   registrar('info', 'API escuchando', { puerto: config.puerto });
 });
 
@@ -17,7 +14,7 @@ for (const senal of ['SIGTERM', 'SIGINT']) {
   process.once(senal, () => {
     registrar('info', 'cerrando la API', { senal });
     servidor.close(async () => {
-      await pool.end();
+      await cerrar();
       process.exit(0);
     });
   });

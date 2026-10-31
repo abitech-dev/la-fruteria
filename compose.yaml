@@ -32,9 +32,32 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      redis:
+        condition: service_healthy
+    # Antes de arrancar la API, una caja de paso deja el catálogo en Redis.
+    pre_start:
+      - command: ["node", "src/calentar-cache.js"]
     healthcheck:
       <<: *salud
       test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/salud/listo').then((r) => process.exit(r.ok ? 0 : 1), () => process.exit(1))"]
+
+  despachador:
+    build: ./api
+    command: ["node", "src/despachador.js"]
+    environment:
+      BD_CLAVE: ${BD_CLAVE:?Falta BD_CLAVE en el archivo .env}
+    networks:
+      - fondo
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      <<: *salud
+      test: ["CMD", "node", "-e", "process.exit(Date.now() - require('node:fs').statSync('/tmp/latido').mtimeMs < 30000 ? 0 : 1)"]
+    deploy:
+      replicas: 2
 
   postgres:
     image: postgres:18-alpine@sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873
@@ -49,6 +72,17 @@ services:
     healthcheck:
       <<: *salud
       test: ["CMD", "pg_isready", "-U", "fruteria", "-d", "fruteria"]
+
+  redis:
+    image: redis:8-alpine@sha256:3811787313eba226a2ef38658c6ccb91cd5e110edc89c37767de373120a0e5a0
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - datos-redis:/data
+    networks:
+      - fondo
+    healthcheck:
+      <<: *salud
+      test: ["CMD", "redis-cli", "ping"]
 
   # Una consola de PostgreSQL que solo arranca con --profile herramientas.
   psql:
@@ -72,3 +106,4 @@ networks:
 
 volumes:
   datos-postgres:
+  datos-redis:

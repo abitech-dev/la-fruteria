@@ -15,6 +15,7 @@ describe('leerConfig', () => {
     const config = leerConfig({ BD_CLAVE: 'clave' });
     assert.equal(config.baseDeDatos.host, 'postgres');
     assert.equal(config.baseDeDatos.database, 'fruteria');
+    assert.equal(config.redisUrl, 'redis://redis:6379');
     assert.equal(config.puerto, 3000);
   });
 

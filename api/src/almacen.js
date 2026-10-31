@@ -52,6 +52,13 @@ export function crearAlmacen(pool) {
       return rows[0] ?? null;
     },
 
+    async marcarDespachado(codigo) {
+      await pool.query(
+        "UPDATE pedidos SET estado = 'despachado', despachado_en = now() WHERE codigo = $1 AND estado = 'recibido'",
+        [codigo],
+      );
+    },
+
     async comprobar() {
       await pool.query('SELECT 1');
     },

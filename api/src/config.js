@@ -9,5 +9,8 @@ export function leerConfig(entorno = process.env) {
       user: entorno.BD_USUARIO ?? 'fruteria',
       password: entorno.BD_CLAVE,
     },
+    redisUrl: entorno.REDIS_URL ?? 'redis://redis:6379',
+    demoraDeDespachoMs: Number(entorno.DEMORA_DE_DESPACHO_MS ?? 3000),
+    latido: entorno.LATIDO ?? '/tmp/latido',
   };
 }

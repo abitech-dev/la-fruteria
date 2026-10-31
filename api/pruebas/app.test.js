@@ -15,9 +15,10 @@ const PEDIDO = {
 };
 
 function crearFalsos() {
-  const estado = { busquedas: 0, guardados: [] };
+  const estado = { lecturasDelAlmacen: 0, busquedas: 0, guardados: [], encolados: [], catalogo: null };
   const almacen = {
     async listarProductos() {
+      estado.lecturasDelAlmacen += 1;
       return PRODUCTOS;
     },
     async preciosDe(codigos) {
@@ -37,7 +38,21 @@ function crearFalsos() {
       if (estado.isBaseCaida) throw new Error('sin conexión');
     },
   };
-  return { estado, almacen, registrar: () => {} };
+  const cola = {
+    async leerCatalogo() {
+      return estado.catalogo;
+    },
+    async guardarCatalogo(productos) {
+      estado.catalogo = productos;
+    },
+    async encolarDespacho(codigo) {
+      estado.encolados.push(codigo);
+    },
+    async comprobar() {
+      if (estado.isRedisCaido) throw new Error('sin Redis');
+    },
+  };
+  return { estado, almacen, cola, registrar: () => {} };
 }
 
 async function conServidor(dependencias, prueba) {
@@ -58,15 +73,18 @@ const enviar = (cuerpo) => ({
 });
 
 describe('catálogo', () => {
-  it('devuelve los productos', async () => {
-    await conServidor(crearFalsos(), async (pedir) => {
+  it('devuelve los productos y la segunda vez los toma de la caché', async () => {
+    const falsos = crearFalsos();
+    await conServidor(falsos, async (pedir) => {
       assert.deepEqual(await (await pedir('/api/productos')).json(), PRODUCTOS);
+      await pedir('/api/productos');
+      assert.equal(falsos.estado.lecturasDelAlmacen, 1);
     });
   });
 });
 
 describe('crear un pedido', () => {
-  it('lo guarda con el total calculado en el servidor', async () => {
+  it('lo guarda con el total calculado en el servidor y lo pone en la cola de despachos', async () => {
     const falsos = crearFalsos();
     await conServidor(falsos, async (pedir) => {
       const respuesta = await pedir('/api/pedidos', enviar({ ...PEDIDO, total_centimos: 1 }));
@@ -75,6 +93,7 @@ describe('crear un pedido', () => {
       assert.ok(isCodigoValido(cuerpo.codigo));
       assert.equal(cuerpo.total_centimos, 5390);
       assert.equal(respuesta.headers.get('location'), `/api/pedidos/${cuerpo.codigo}`);
+      assert.deepEqual(falsos.estado.encolados, [cuerpo.codigo]);
       assert.equal(falsos.estado.guardados[0].lineas[0].precio_centimos, 2200);
     });
   });
@@ -89,7 +108,7 @@ describe('crear un pedido', () => {
     });
   });
 
-  it('rechaza un producto que no existe sin guardar nada', async () => {
+  it('rechaza un producto que no existe sin guardar ni encolar nada', async () => {
     const falsos = crearFalsos();
     await conServidor(falsos, async (pedir) => {
       const lineas = [{ producto: 'MAN-001', cantidad: 1 }];
@@ -98,6 +117,7 @@ describe('crear un pedido', () => {
       assert.equal(respuesta.status, 422);
       assert.match(errores.lineas, /MAN-001/);
       assert.equal(falsos.estado.guardados.length, 0);
+      assert.equal(falsos.estado.encolados.length, 0);
     });
   });
 
@@ -172,6 +192,14 @@ describe('salud', () => {
       const respuesta = await pedir('/salud/listo');
       assert.equal(respuesta.status, 503);
       assert.deepEqual(await respuesta.json(), { estado: 'no listo' });
+    });
+  });
+
+  it('responde 503 cuando Redis no contesta', async () => {
+    const falsos = crearFalsos();
+    falsos.estado.isRedisCaido = true;
+    await conServidor(falsos, async (pedir) => {
+      assert.equal((await pedir('/salud/listo')).status, 503);
     });
   });
 });

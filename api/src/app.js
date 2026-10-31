@@ -1,14 +1,19 @@
 import express from 'express';
 import { calcularTotal, generarCodigo, isCodigoValido, validarPedido } from './pedidos.js';
 
-export function crearApp({ almacen, registrar }) {
+export function crearApp({ almacen, cola, registrar }) {
   const app = express();
   app.disable('x-powered-by');
   app.use(express.json({ limit: '10kb' }));
   app.use(registrarSolicitudes(registrar));
 
   app.get('/api/productos', async (_solicitud, respuesta) => {
-    respuesta.json(await almacen.listarProductos());
+    let productos = await cola.leerCatalogo();
+    if (!productos) {
+      productos = await almacen.listarProductos();
+      await cola.guardarCatalogo(productos);
+    }
+    respuesta.json(productos);
   });
 
   app.post('/api/pedidos', async (solicitud, respuesta) => {
@@ -26,6 +31,7 @@ export function crearApp({ almacen, registrar }) {
     const total = calcularTotal(pedido.lineas, precios);
     const lineas = pedido.lineas.map((linea) => ({ ...linea, precio_centimos: precios.get(linea.producto) }));
     await almacen.guardarPedido({ ...pedido, lineas, codigo, total_centimos: total });
+    await cola.encolarDespacho(codigo);
     respuesta
       .status(201)
       .location(`/api/pedidos/${codigo}`)
@@ -43,7 +49,7 @@ export function crearApp({ almacen, registrar }) {
 
   app.get('/salud/listo', async (_solicitud, respuesta) => {
     try {
-      await almacen.comprobar();
+      await Promise.all([almacen.comprobar(), cola.comprobar()]);
       respuesta.json({ estado: 'listo' });
     } catch (error) {
       registrar('warn', 'no está lista', { motivo: error.message });
