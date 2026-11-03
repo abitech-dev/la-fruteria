@@ -1,4 +1,5 @@
-FROM node:24@sha256:14078204b6bb268c107ceff6d3c43f45a888105e5c2b18b14c32b3409d93a1b0 AS compilacion
+# syntax=docker/dockerfile:1
+FROM node:24-alpine@sha256:44fce696f38ba8c987c4db89954051000bbd05ffd8d8659ba15ed4a8602e937f AS compilacion
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
