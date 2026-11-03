@@ -87,16 +87,16 @@ Dice qué gana la tienda en cada capítulo y qué etiqueta de Git marca ese esta
 
 | Cap. | Tema | La Frutería gana | Etiqueta |
 | --- | --- | --- | --- |
-| 1 | Amenazas | Sin cambios; se hace el mapa de riesgos de la tienda. | `vol05-cap01` |
-| 2 | Aislamiento del kernel | `cap_drop: ALL` y `no-new-privileges` en los servicios propios. | `vol05-cap02` |
-| 3 | Sin root | La vitrina pasa a nginx sin privilegios. | `vol05-cap03` |
-| 4 | El socket de Docker | Sin cambios; ningún servicio monta el socket. | `vol05-cap04` |
-| 5 | Imágenes base mínimas | Todas las imágenes fijadas por digest y revisadas con Hadolint. | `vol05-cap05` |
+| 1 | Amenazas | Sin cambios; el mapa de amenazas de la tienda queda en el capítulo. | `vol05-cap01` |
+| 2 | Aislamiento del kernel | `cap_drop: ALL` y `no-new-privileges` en los servicios propios, y `no-new-privileges` en PostgreSQL y Redis. | `vol05-cap02` |
+| 3 | Sin root | Sin cambios; se comprueba que ninguna caja propia corre como root, porque la vitrina usa nginx sin privilegios desde `vol02-cap07`. | `vol05-cap03` |
+| 4 | El socket de Docker | Sin cambios; ningún servicio monta el socket, y el Dev Container avisa que lo tiene. | `vol05-cap04` |
+| 5 | Imágenes base mínimas | La vitrina compila sobre `node:24-alpine`, la API usa un usuario numérico y Hadolint no da avisos. | `vol05-cap05` |
 | 6 | Secretos | La clave pasa del `.env` a un secreto de Compose. | `vol05-cap06` |
 | 7 | El escáner | El inventario de software (SBOM) y un informe de vulnerabilidades sin críticas. | `vol05-cap07` |
-| 8 | Firma y procedencia | Las imágenes firmadas con cosign y con su procedencia. | `vol05-cap08` |
+| 8 | Firma y procedencia | El archivo de Bake con procedencia e inventario, y las imágenes firmadas con cosign en un registro local. | `vol05-cap08` |
 | 9 | Vallas y aforo | La red `fondo` sin internet, solo lectura, límites y aforo de pedidos en nginx. | `vol05-cap09` |
-| 10 | Inspección periódica | Docker Bench sin fallas graves. Es el estado de la rama `main`. | `vol05-cap10` |
+| 10 | Inspección periódica | Docker Bench sin avisos en las secciones de imágenes y de cajas. Los servicios quedan como en `main`, sin las métricas del volumen 6. | `vol05-cap10` |
 
 ## Volumen 6 · Rumbo a producción
 
