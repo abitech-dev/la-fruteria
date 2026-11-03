@@ -5,6 +5,12 @@ services:
       context: ./web
       target: compilacion
     command: ["node_modules/.bin/vite", "--host", "0.0.0.0"]
+    # Vite escribe su caché en node_modules y pide más memoria que nginx.
+    read_only: false
+    deploy:
+      resources:
+        limits:
+          memory: 512M
     ports: !override
       - "127.0.0.1:5173:5173"
     environment:
@@ -20,6 +26,8 @@ services:
           path: ./web/package.json
 
   api:
+    # La sincronización en vivo escribe el código nuevo dentro de la caja.
+    read_only: false
     develop:
       watch:
         - action: sync+restart

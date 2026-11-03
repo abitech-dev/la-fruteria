@@ -1,11 +1,15 @@
 name: la-fruteria
 
-# Los servicios propios no usan ningún poder de root.
+# Servicios propios sin privilegios y en solo lectura.
 x-endurecido: &endurecido
+  read_only: true
+  tmpfs:
+    - /tmp
   cap_drop:
     - ALL
   security_opt:
     - no-new-privileges:true
+  restart: unless-stopped
 
 # Cada servicio avisa cuando de verdad puede atender.
 x-salud: &salud
@@ -29,6 +33,12 @@ services:
     healthcheck:
       <<: *salud
       test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8080/"]
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 64M
+          pids: 100
 
   api:
     <<: *endurecido
@@ -51,6 +61,12 @@ services:
     healthcheck:
       <<: *salud
       test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/salud/listo').then((r) => process.exit(r.ok ? 0 : 1), () => process.exit(1))"]
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+          pids: 100
 
   despachador:
     <<: *endurecido
@@ -72,6 +88,11 @@ services:
       test: ["CMD", "node", "-e", "process.exit(Date.now() - require('node:fs').statSync('/tmp/latido').mtimeMs < 30000 ? 0 : 1)"]
     deploy:
       replicas: 2
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 128M
+          pids: 100
 
   postgres:
     image: postgres:18-alpine@sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873
@@ -87,9 +108,15 @@ services:
       - fondo
     security_opt:
       - no-new-privileges:true
+    restart: unless-stopped
     healthcheck:
       <<: *salud
       test: ["CMD", "pg_isready", "-U", "fruteria", "-d", "fruteria"]
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 512M
 
   redis:
     image: redis:8-alpine@sha256:3811787313eba226a2ef38658c6ccb91cd5e110edc89c37767de373120a0e5a0
@@ -100,9 +127,15 @@ services:
       - fondo
     security_opt:
       - no-new-privileges:true
+    restart: unless-stopped
     healthcheck:
       <<: *salud
       test: ["CMD", "redis-cli", "ping"]
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 128M
 
   # Una consola de PostgreSQL que solo arranca con --profile herramientas.
   psql:
@@ -124,7 +157,9 @@ services:
 
 networks:
   frente:
+  # Sin salida a internet. De las cajas del frente, solo la API entra aquí.
   fondo:
+    internal: true
 
 volumes:
   datos-postgres:
