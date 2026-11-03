@@ -1,0 +1,87 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://github.com/abitech-dev/la-fruteria/vex/api-npm",
+  "author": "La Frutería",
+  "timestamp": "2026-11-03T00:00:00Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-102276"
+      },
+      "products": [
+        {
+          "@id": "pkg:npm/brace-expansion@5.0.9"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Solo npm usa este paquete, y la API corre con node sin ejecutar npm."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-102278"
+      },
+      "products": [
+        {
+          "@id": "pkg:npm/brace-expansion@5.0.9"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Solo npm usa este paquete, y la API corre con node sin ejecutar npm."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-109383"
+      },
+      "products": [
+        {
+          "@id": "pkg:npm/undici@6.28.0"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Solo npm usa este paquete, y la API corre con node sin ejecutar npm."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-109869"
+      },
+      "products": [
+        {
+          "@id": "pkg:npm/undici@6.28.0"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Solo npm usa este paquete, y la API corre con node sin ejecutar npm."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-19534"
+      },
+      "products": [
+        {
+          "@id": "pkg:npm/undici@6.28.0"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Solo npm usa este paquete, y la API corre con node sin ejecutar npm."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-87018"
+      },
+      "products": [
+        {
+          "@id": "pkg:npm/undici@6.28.0"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Solo npm usa este paquete, y la API corre con node sin ejecutar npm."
+    }
+  ]
+}
