@@ -93,10 +93,10 @@ Dice qué gana la tienda en cada capítulo y qué etiqueta de Git marca ese esta
 | 4 | El socket de Docker | Sin cambios; ningún servicio monta el socket, y el Dev Container avisa que lo tiene. | `vol05-cap04` |
 | 5 | Imágenes base mínimas | La vitrina compila sobre `node:24-alpine`, la API usa un usuario numérico y Hadolint no da avisos. | `vol05-cap05` |
 | 6 | Secretos | La clave pasa del `.env` a un secreto de Compose. | `vol05-cap06` |
-| 7 | El escáner | El inventario de software (SBOM) y un informe de vulnerabilidades sin críticas. | `vol05-cap07` |
+| 7 | El escáner | La vitrina sobre nginx `alpine-slim`, `body-parser` al día y un VEX para las fallas de npm. El informe queda sin críticas ni altas. | `vol05-cap07` |
 | 8 | Firma y procedencia | El archivo de Bake con procedencia e inventario, y las imágenes firmadas con cosign en un registro local. | `vol05-cap08` |
-| 9 | Vallas y aforo | La red `fondo` sin internet, solo lectura, límites y aforo de pedidos en nginx. | `vol05-cap09` |
-| 10 | Inspección periódica | Docker Bench sin avisos en las secciones de imágenes y de cajas. Los servicios quedan como en `main`, sin las métricas del volumen 6. | `vol05-cap10` |
+| 9 | Vallas y aforo | La red `fondo` sin internet, solo lectura, límites, reinicio y aforo de pedidos en nginx. | `vol05-cap09` |
+| 10 | Inspección periódica | PostgreSQL y Redis en solo lectura y con límite de procesos. Docker Bench deja seis avisos explicados. | `vol05-cap10` |
 
 ## Volumen 6 · Rumbo a producción
 
