@@ -105,6 +105,11 @@ services:
       - ./base-de-datos:/docker-entrypoint-initdb.d:ro
     networks:
       - fondo
+    # PostgreSQL escribe sus datos en el volumen y su socket en memoria.
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /var/run/postgresql
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
@@ -116,6 +121,7 @@ services:
         limits:
           cpus: "1"
           memory: 512M
+          pids: 100
 
   redis:
     image: redis:8-alpine@sha256:3811787313eba226a2ef38658c6ccb91cd5e110edc89c37767de373120a0e5a0
@@ -124,6 +130,7 @@ services:
       - datos-redis:/data
     networks:
       - fondo
+    read_only: true
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
@@ -135,10 +142,11 @@ services:
         limits:
           cpus: "0.25"
           memory: 128M
+          pids: 100
 
 networks:
   frente: {}
-  # Sin salida a internet; solo la API llega a la base y a Redis.
+  # Sin salida a internet. De las cajas del frente, solo la API entra aquí.
   fondo:
     internal: true
 

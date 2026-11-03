@@ -82,6 +82,8 @@ docker run --rm --network la-fruteria_frente \
 | `secretos/` | La clave de la base de datos. Git no la guarda. |
 | `docs/` | La [hoja de ruta](docs/hoja-de-ruta.md): qué gana la tienda en cada capítulo del libro. |
 
+`vex.openvex.json` declara las fallas del npm de la imagen, que la API no ejecuta, y Trivy lo lee con `--vex`.
+
 Las fuentes de `web/public/fuentes/` tienen licencia SIL Open Font License.
 
 ## Autor y licencia
