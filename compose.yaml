@@ -1,5 +1,12 @@
 name: la-fruteria
 
+# Los servicios propios no usan ningún poder de root.
+x-endurecido: &endurecido
+  cap_drop:
+    - ALL
+  security_opt:
+    - no-new-privileges:true
+
 # Cada servicio avisa cuando de verdad puede atender.
 x-salud: &salud
   interval: 10s
@@ -10,6 +17,7 @@ x-salud: &salud
 
 services:
   web:
+    <<: *endurecido
     build: ./web
     ports:
       - "127.0.0.1:8080:8080"
@@ -23,6 +31,7 @@ services:
       test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8080/"]
 
   api:
+    <<: *endurecido
     build: ./api
     environment:
       BD_CLAVE: ${BD_CLAVE:?Falta BD_CLAVE en el archivo .env}
@@ -42,6 +51,7 @@ services:
       test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/salud/listo').then((r) => process.exit(r.ok ? 0 : 1), () => process.exit(1))"]
 
   despachador:
+    <<: *endurecido
     build: ./api
     command: ["node", "src/despachador.js"]
     environment:
@@ -69,6 +79,8 @@ services:
       - ./base-de-datos:/docker-entrypoint-initdb.d:ro
     networks:
       - fondo
+    security_opt:
+      - no-new-privileges:true
     healthcheck:
       <<: *salud
       test: ["CMD", "pg_isready", "-U", "fruteria", "-d", "fruteria"]
@@ -80,6 +92,8 @@ services:
       - datos-redis:/data
     networks:
       - fondo
+    security_opt:
+      - no-new-privileges:true
     healthcheck:
       <<: *salud
       test: ["CMD", "redis-cli", "ping"]
