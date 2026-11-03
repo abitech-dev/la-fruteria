@@ -34,7 +34,9 @@ services:
     <<: *endurecido
     build: ./api
     environment:
-      BD_CLAVE: ${BD_CLAVE:?Falta BD_CLAVE en el archivo .env}
+      BD_CLAVE_ARCHIVO: /run/secrets/bd_clave
+    secrets:
+      - bd_clave
     networks:
       - frente
       - fondo
@@ -55,7 +57,9 @@ services:
     build: ./api
     command: ["node", "src/despachador.js"]
     environment:
-      BD_CLAVE: ${BD_CLAVE:?Falta BD_CLAVE en el archivo .env}
+      BD_CLAVE_ARCHIVO: /run/secrets/bd_clave
+    secrets:
+      - bd_clave
     networks:
       - fondo
     depends_on:
@@ -73,7 +77,9 @@ services:
     image: postgres:18-alpine@sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873
     environment:
       POSTGRES_USER: fruteria
-      POSTGRES_PASSWORD: ${BD_CLAVE:?Falta BD_CLAVE en el archivo .env}
+      POSTGRES_PASSWORD_FILE: /run/secrets/bd_clave
+    secrets:
+      - bd_clave
     volumes:
       - datos-postgres:/var/lib/postgresql
       - ./base-de-datos:/docker-entrypoint-initdb.d:ro
@@ -106,13 +112,15 @@ services:
       PGHOST: postgres
       PGUSER: fruteria
       PGDATABASE: fruteria
-      PGPASSWORD: ${BD_CLAVE:?Falta BD_CLAVE en el archivo .env}
     networks:
       - fondo
     depends_on:
       postgres:
         condition: service_healthy
-    entrypoint: ["psql"]
+    secrets:
+      - bd_clave
+    # psql no lee su clave de un archivo, así que sh se la pasa al arrancar.
+    entrypoint: ["sh", "-c", "PGPASSWORD=\"$$(cat /run/secrets/bd_clave)\" exec psql \"$$@\"", "psql"]
 
 networks:
   frente:
@@ -121,3 +129,7 @@ networks:
 volumes:
   datos-postgres:
   datos-redis:
+
+secrets:
+  bd_clave:
+    file: ./secretos/bd_clave.txt
