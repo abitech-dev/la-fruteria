@@ -1,9 +1,21 @@
 # Lo que cambia en el servidor. Se suma a compose.yaml con -f,
 # o con COMPOSE_FILE en el archivo .env del servidor.
 services:
+  # En el servidor nada se construye. Las imágenes llegan del registro,
+  # con la versión que anota el despliegue en el archivo .env.
   web:
+    image: ${IMAGENES:?}-web:${VERSION:?}
+    build: !reset null
     # La vitrina deja de publicar el 8080. Ahora atiende Caddy.
     ports: !reset []
+
+  api:
+    image: ${IMAGENES:?}-api:${VERSION:?}
+    build: !reset null
+
+  despachador:
+    image: ${IMAGENES:?}-api:${VERSION:?}
+    build: !reset null
 
   # La única puerta de la tienda a internet, con su certificado.
   caddy:
