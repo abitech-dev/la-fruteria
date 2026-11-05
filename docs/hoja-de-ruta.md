@@ -103,7 +103,7 @@ Dice qué gana la tienda en cada capítulo y qué etiqueta de Git marca ese esta
 | Cap. | Tema | La Frutería gana | Etiqueta |
 | --- | --- | --- | --- |
 | 1 | De la laptop al VPS | `servidor/practica/`, un Ubuntu en tu Docker para practicar sin un VPS. | `vol06-cap01` |
-| 2 | Preparar el servidor | Un script que prepara Ubuntu con SSH por clave, Docker, UFW, `DOCKER-USER` y actualizaciones automáticas. | `vol06-cap02` |
+| 2 | Preparar el servidor | `servidor/preparar.sh`, que prepara Ubuntu con un usuario propio, SSH por clave, Docker, UFW, `DOCKER-USER` y actualizaciones automáticas. | `vol06-cap02` |
 | 3 | Proxy inverso y HTTPS | Caddy en `compose.produccion.yaml`, con dominio y certificado automático. | `vol06-cap03` |
 | 4 | CI/CD | `ci.yml`, que prueba, y `deploy-production.yml`, que publica en GHCR, firma sin claves y despliega. | `vol06-cap04` |
 | 5 | Dokploy, Coolify y Portainer | Sin cambios en el repositorio. | `vol06-cap05` |
