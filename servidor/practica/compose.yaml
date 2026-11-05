@@ -1,0 +1,14 @@
+name: servidor-de-practica
+
+services:
+  servidor:
+    build: .
+    container_name: servidor
+    hostname: fruteria
+    # Hace de computadora entera, con su propio Docker adentro.
+    privileged: true
+    volumes:
+      - docker-del-servidor:/var/lib/docker
+
+volumes:
+  docker-del-servidor:
