@@ -1,0 +1,7 @@
+{
+	acme_ca {$ACME_CA}
+}
+
+{$DOMINIO} {
+	reverse_proxy web:8080
+}
