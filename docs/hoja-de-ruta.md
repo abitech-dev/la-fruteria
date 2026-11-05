@@ -103,13 +103,13 @@ Dice qué gana la tienda en cada capítulo y qué etiqueta de Git marca ese esta
 | Cap. | Tema | La Frutería gana | Etiqueta |
 | --- | --- | --- | --- |
 | 1 | De la laptop al VPS | Sin cambios. | `vol06-cap01` |
-| 2 | Preparar el servidor | Un script que prepara Ubuntu con Docker y firewall. | `vol06-cap02` |
-| 3 | Proxy inverso y HTTPS | Un proxy inverso con dominio y certificado automático. | `vol06-cap03` |
-| 4 | CI/CD | Un flujo de GitHub Actions que prueba, publica y despliega. | `vol06-cap04` |
+| 2 | Preparar el servidor | Un script que prepara Ubuntu con SSH por clave, Docker, UFW, `DOCKER-USER` y actualizaciones automáticas. | `vol06-cap02` |
+| 3 | Proxy inverso y HTTPS | Caddy en `compose.produccion.yaml`, con dominio y certificado automático. | `vol06-cap03` |
+| 4 | CI/CD | `ci.yml`, que prueba, y `deploy-production.yml`, que publica en GHCR, firma sin claves y despliega. | `vol06-cap04` |
 | 5 | Dokploy, Coolify y Portainer | Sin cambios en el repositorio. | `vol06-cap05` |
 | 6 | Despliegues sin cortes | Despliegue de la API sin cortar pedidos, con el cierre ordenado que ya tiene. | `vol06-cap06` |
-| 7 | Logs, métricas y alertas | Prometheus y Grafana leen `/metricas`, con una alerta de errores. | `vol06-cap07` |
-| 8 | Copias y recuperación | La copia diaria de PostgreSQL fuera del servidor. | `vol06-cap08` |
+| 7 | Logs, métricas y alertas | Tope de las bitácoras, y Prometheus, Grafana y Alertmanager sobre `/metricas`, con una alerta de errores. | `vol06-cap07` |
+| 8 | Copias y recuperación | La copia diaria de PostgreSQL fuera del servidor, con restic. | `vol06-cap08` |
 | 9 | Manual de incidentes | El manual de incidentes de la tienda. | `vol06-cap09` |
 | 10 | Costos y tamaño | Los límites de memoria y CPU ajustados con mediciones reales. | `vol06-cap10` |
 
