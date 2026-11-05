@@ -52,7 +52,7 @@ function crearFalsos() {
       if (estado.isRedisCaido) throw new Error('sin Redis');
     },
   };
-  return { estado, almacen, cola, registrar: () => {} };
+  return { estado, almacen, cola, registrar: () => {}, atendidoPor: 'caja-de-prueba' };
 }
 
 async function conServidor(dependencias, prueba) {
@@ -95,6 +95,14 @@ describe('crear un pedido', () => {
       assert.equal(respuesta.headers.get('location'), `/api/pedidos/${cuerpo.codigo}`);
       assert.deepEqual(falsos.estado.encolados, [cuerpo.codigo]);
       assert.equal(falsos.estado.guardados[0].lineas[0].precio_centimos, 2200);
+    });
+  });
+
+  it('anota qué caja de la API lo atendió', async () => {
+    const falsos = crearFalsos();
+    await conServidor(falsos, async (pedir) => {
+      await pedir('/api/pedidos', enviar(PEDIDO));
+      assert.equal(falsos.estado.guardados[0].atendido_por, 'caja-de-prueba');
     });
   });
 

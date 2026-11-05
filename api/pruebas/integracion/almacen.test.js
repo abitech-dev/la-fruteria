@@ -40,4 +40,26 @@ describe('almacén contra un PostgreSQL real', () => {
     await almacen.marcarDespachado('PRUE-BA01');
     assert.equal((await almacen.buscarPedido('PRUE-BA01')).estado, 'despachado');
   });
+
+  it('anota qué caja atendió el pedido', async () => {
+    const lineas = [{ producto: 'ARA-500', cantidad: 1, precio_centimos: 2200 }];
+    const pedido = { cliente: 'Nayeli', ciudad: 'Lima', total_centimos: 2200, lineas };
+    await almacen.guardarPedido({ ...pedido, codigo: 'PRUE-BA02', atendido_por: 'caja-nueva' });
+    const { rows } = await pool.query("SELECT atendido_por FROM pedidos WHERE codigo = 'PRUE-BA02'");
+    assert.equal(rows[0].atendido_por, 'caja-nueva');
+  });
+
+  // Durante el despliegue, la versión anterior guarda pedidos en la misma base.
+  it('acepta el pedido de la versión anterior, que no anota la caja', async () => {
+    await pool.query(
+      "INSERT INTO pedidos (codigo, cliente, ciudad, total_centimos) VALUES ('PRUE-BA03', 'Mirella', 'Lima', 990)",
+    );
+    const { rows } = await pool.query("SELECT atendido_por FROM pedidos WHERE codigo = 'PRUE-BA03'");
+    assert.equal(rows[0].atendido_por, null);
+  });
+
+  it('aplica dos veces los cambios de la base sin fallar', async () => {
+    const cambios = readFileSync(new URL('03-cambios.sql', ESQUEMA), 'utf8');
+    await pool.query(cambios);
+  });
 });

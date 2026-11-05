@@ -1,7 +1,7 @@
 import express from 'express';
 import { calcularTotal, generarCodigo, isCodigoValido, validarPedido } from './pedidos.js';
 
-export function crearApp({ almacen, cola, registrar }) {
+export function crearApp({ almacen, cola, registrar, atendidoPor }) {
   const app = express();
   app.disable('x-powered-by');
   app.use(express.json({ limit: '10kb' }));
@@ -30,7 +30,7 @@ export function crearApp({ almacen, cola, registrar }) {
     const codigo = generarCodigo();
     const total = calcularTotal(pedido.lineas, precios);
     const lineas = pedido.lineas.map((linea) => ({ ...linea, precio_centimos: precios.get(linea.producto) }));
-    await almacen.guardarPedido({ ...pedido, lineas, codigo, total_centimos: total });
+    await almacen.guardarPedido({ ...pedido, lineas, codigo, total_centimos: total, atendido_por: atendidoPor });
     await cola.encolarDespacho(codigo);
     respuesta
       .status(201)

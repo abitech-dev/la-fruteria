@@ -15,13 +15,14 @@ export function crearAlmacen(pool) {
       return new Map(rows.map((fila) => [fila.codigo, fila.precio_centimos]));
     },
 
-    async guardarPedido({ codigo, cliente, ciudad, total_centimos, lineas }) {
+    async guardarPedido({ codigo, cliente, ciudad, total_centimos, atendido_por, lineas }) {
       const conexion = await pool.connect();
       try {
         await conexion.query('BEGIN');
         const { rows } = await conexion.query(
-          'INSERT INTO pedidos (codigo, cliente, ciudad, total_centimos) VALUES ($1, $2, $3, $4) RETURNING id',
-          [codigo, cliente, ciudad, total_centimos],
+          `INSERT INTO pedidos (codigo, cliente, ciudad, total_centimos, atendido_por)
+           VALUES ($1, $2, $3, $4, $5) RETURNING id`,
+          [codigo, cliente, ciudad, total_centimos, atendido_por],
         );
         await conexion.query(
           `INSERT INTO lineas_de_pedido (pedido_id, producto_id, cantidad, precio_centimos)
