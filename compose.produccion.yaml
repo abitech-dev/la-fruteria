@@ -1,0 +1,47 @@
+# Lo que cambia en el servidor. Se suma a compose.yaml con -f,
+# o con COMPOSE_FILE en el archivo .env del servidor.
+services:
+  web:
+    # La vitrina deja de publicar el 8080. Ahora atiende Caddy.
+    ports: !reset []
+
+  # La única puerta de la tienda a internet, con su certificado.
+  caddy:
+    image: caddy:2.11-alpine@sha256:70b3180738b46cd88e49b300d790ae448a0aca3f58edef0f000bb57d619a9ab3
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMINIO: ${DOMINIO:?Falta DOMINIO en el archivo .env}
+      ACME_CA: ${ACME_CA:-https://acme-v02.api.letsencrypt.org/directory}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      # Los certificados y sus claves. Si se pierden, se piden otra vez.
+      - datos-caddy:/data
+      - config-caddy:/config
+    networks:
+      - frente
+    depends_on:
+      web:
+        condition: service_healthy
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    # Abrir el 80 y el 443 es lo único que Caddy necesita de root.
+    cap_add:
+      - NET_BIND_SERVICE
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 128M
+          pids: 100
+
+volumes:
+  datos-caddy:
+  config-caddy:

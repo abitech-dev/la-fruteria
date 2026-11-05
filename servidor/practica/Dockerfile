@@ -5,11 +5,14 @@ ARG DEBIAN_FRONTEND=noninteractive
 # hadolint ignore=DL3008
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
-      ca-certificates curl iproute2 openssh-server \
-      procps sudo systemd systemd-sysv ufw \
+      ca-certificates curl git iproute2 openssh-server \
+      openssl procps sudo systemd systemd-sysv ufw \
  && rm -rf /var/lib/apt/lists/* /usr/sbin/policy-rc.d \
  && systemctl mask getty@tty1.service \
       systemd-modules-load.service
+# Docker Hub limita las descargas anónimas, y este espejo guarda
+# las imágenes más usadas.
+COPY daemon.json /etc/docker/daemon.json
 # systemd se apaga en orden con esta señal.
 STOPSIGNAL SIGRTMIN+3
 CMD ["/sbin/init"]
