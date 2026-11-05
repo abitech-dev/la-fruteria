@@ -1,3 +1,4 @@
+import { hostname } from 'node:os';
 import { crearApp } from './app.js';
 import { leerConfig } from './config.js';
 import { conectar } from './conexiones.js';
@@ -6,7 +7,8 @@ import { registrar } from './registro.js';
 
 const config = leerConfig();
 const { almacen, cola, cerrar } = await conectar(config, registrar);
-const app = crearApp({ almacen, cola, metricas: crearMetricas(), registrar });
+// Dentro de una caja, el nombre de la máquina es el de la caja.
+const app = crearApp({ almacen, cola, metricas: crearMetricas(), registrar, atendidoPor: hostname() });
 const servidor = app.listen(config.puerto, () => {
   registrar('info', 'API escuchando', { puerto: config.puerto });
 });

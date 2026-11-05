@@ -107,7 +107,7 @@ Dice qué gana la tienda en cada capítulo y qué etiqueta de Git marca ese esta
 | 3 | Proxy inverso y HTTPS | Caddy en `compose.produccion.yaml` con su `Caddyfile`, como la única puerta a internet y con certificado automático. Pebble lo imita en el servidor de práctica. | `vol06-cap03` |
 | 4 | CI/CD | `ci.yml`, que prueba, y `deploy-production.yml`, que publica en GHCR, firma sin claves y despliega. | `vol06-cap04` |
 | 5 | Dokploy, Coolify y Portainer | `servidor/panel/compose.yaml`, Portainer abierto solo en el mismo servidor, para entrar por un túnel SSH. | `vol06-cap05` |
-| 6 | Despliegues sin cortes | Despliegue de la API sin cortar pedidos, con el cierre ordenado que ya tiene. | `vol06-cap06` |
+| 6 | Despliegues sin cortes | `docker-rollout` cambia la API y la vitrina sin cortar pedidos, y la base suma una columna que sirve a las dos versiones. nginx cuenta el tope de pedidos por cliente, también detrás de Caddy. | `vol06-cap06` |
 | 7 | Logs, métricas y alertas | Tope de las bitácoras, y Prometheus, Grafana y Alertmanager sobre `/metricas`, con una alerta de errores. | `vol06-cap07` |
 | 8 | Copias y recuperación | La copia diaria de PostgreSQL fuera del servidor, con restic. | `vol06-cap08` |
 | 9 | Manual de incidentes | El manual de incidentes de la tienda. | `vol06-cap09` |
