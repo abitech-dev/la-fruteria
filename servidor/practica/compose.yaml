@@ -5,10 +5,15 @@ services:
     build: .
     container_name: servidor
     hostname: fruteria
-    # Hace de computadora entera, con su propio Docker adentro.
+    # Hace de computadora entera, con systemd y Docker.
     privileged: true
+    tmpfs:
+      - /run
+      - /run/lock
     volumes:
       - docker-del-servidor:/var/lib/docker
+      - containerd-del-servidor:/var/lib/containerd
 
 volumes:
   docker-del-servidor:
+  containerd-del-servidor:
