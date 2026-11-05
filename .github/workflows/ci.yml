@@ -1,0 +1,58 @@
+name: Integración continua
+
+on:
+  pull_request:
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+  # Cada lunes, porque salen fallas nuevas aunque la tienda no cambie.
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  pruebas:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: api
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+      - run: npm ci
+      - run: npm test
+      - run: npm run --if-present test:integracion
+
+  revision:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Revisar los Dockerfile con Hadolint
+        run: |
+          for archivo in web/Dockerfile api/Dockerfile servidor/practica/Dockerfile; do
+            docker run --rm -i -e NO_COLOR=1 \
+              hadolint/hadolint:v2.15.1@sha256:32dac94127fd60b7b7e3fbfc65e1383b9b5e25c9bfd7b8536de7a539fe68a12d \
+              < "$archivo"
+          done
+      - name: Construir las imágenes
+        run: docker compose -f compose.yaml build web api
+      - name: Escanear las imágenes con Trivy
+        run: |
+          for imagen in web api; do
+            docker save -o "$imagen.tar" "la-fruteria-$imagen"
+            docker run --rm -v "$PWD":/trabajo -w /trabajo \
+              aquasec/trivy:0.76.1@sha256:790fd66d1697395d8693d1acaa1ea702406a20f109b6fc7bac8db623eca6c06c \
+              image --input "$imagen.tar" --vex vex.openvex.json \
+              --severity CRITICAL,HIGH --exit-code 1
+          done
