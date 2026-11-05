@@ -45,8 +45,11 @@ jobs:
               hadolint/hadolint:v2.15.1@sha256:32dac94127fd60b7b7e3fbfc65e1383b9b5e25c9bfd7b8536de7a539fe68a12d \
               < "$archivo"
           done
+      # Las mismas imágenes que publica el despliegue, solo para amd64.
       - name: Construir las imágenes
-        run: docker compose -f compose.yaml build web api
+        run: |
+          docker buildx bake --load --set "*.platform=linux/amd64" \
+            --provenance=false --sbom=false
       - name: Escanear las imágenes con Trivy
         run: |
           for imagen in web api; do
