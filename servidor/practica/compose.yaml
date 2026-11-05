@@ -7,9 +7,15 @@ services:
     hostname: fruteria
     # Hace de computadora entera, con systemd y Docker.
     privileged: true
+    ports:
+      - "127.0.0.1:2222:22"
     tmpfs:
       - /run
       - /run/lock
+    # Listo cuando systemd ya abrió la puerta de SSH.
+    healthcheck:
+      test: ["CMD", "systemctl", "is-active", "--quiet", "ssh.socket"]
+      interval: 2s
     volumes:
       - docker-del-servidor:/var/lib/docker
       - containerd-del-servidor:/var/lib/containerd
