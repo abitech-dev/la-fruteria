@@ -1,0 +1,25 @@
+# El panel de Portainer. Tiene el socket de Docker, así que quien
+# entra como administrador manda en todo el servidor.
+name: panel
+
+services:
+  portainer:
+    image: portainer/portainer-ce:2.45.3@sha256:3609c307943bca8e5c492f69ddd6965df177208b50678a4cff28391c8dd4e96e
+    container_name: portainer
+    # Solo desde el mismo servidor. Desde afuera se llega por un túnel SSH.
+    ports:
+      - "127.0.0.1:9443:9443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - datos-portainer:/data
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+
+volumes:
+  datos-portainer:
