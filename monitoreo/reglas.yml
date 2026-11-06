@@ -1,0 +1,15 @@
+groups:
+  - name: tienda
+    rules:
+      # Una sola alerta, por algo que el cliente nota y pide actuar ya.
+      - alert: PedidosConError
+        expr: |
+          sum(rate(fruteria_solicitudes_http_segundos_count{estado=~"5.."}[5m]))
+            / sum(rate(fruteria_solicitudes_http_segundos_count[5m])) > 0.05
+        # Un tropiezo de segundos no despierta a nadie.
+        for: 2m
+        labels:
+          severidad: urgente
+        annotations:
+          resumen: "La tienda falla el {{ $value | humanizePercentage }} de los pedidos."
+          accion: "Revisa la bitácora de la API con docker compose logs api."

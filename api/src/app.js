@@ -1,11 +1,11 @@
 import express from 'express';
 import { calcularTotal, generarCodigo, isCodigoValido, validarPedido } from './pedidos.js';
 
-export function crearApp({ almacen, cola, registrar, atendidoPor }) {
+export function crearApp({ almacen, cola, metricas, registrar, atendidoPor }) {
   const app = express();
   app.disable('x-powered-by');
   app.use(express.json({ limit: '10kb' }));
-  app.use(registrarSolicitudes(registrar));
+  app.use(medirSolicitudes(metricas, registrar));
 
   app.get('/api/productos', async (_solicitud, respuesta) => {
     let productos = await cola.leerCatalogo();
@@ -32,6 +32,7 @@ export function crearApp({ almacen, cola, registrar, atendidoPor }) {
     const lineas = pedido.lineas.map((linea) => ({ ...linea, precio_centimos: precios.get(linea.producto) }));
     await almacen.guardarPedido({ ...pedido, lineas, codigo, total_centimos: total, atendido_por: atendidoPor });
     await cola.encolarDespacho(codigo);
+    metricas.pedidosCreados.inc();
     respuesta
       .status(201)
       .location(`/api/pedidos/${codigo}`)
@@ -57,20 +58,27 @@ export function crearApp({ almacen, cola, registrar, atendidoPor }) {
     }
   });
 
+  // Prometheus la lee por la red interna. La vitrina solo deja pasar /api/.
+  app.get('/metricas', async (_solicitud, respuesta) => {
+    respuesta.type(metricas.tipo).send(await metricas.exponer());
+  });
+
   app.use((_solicitud, respuesta) => respuesta.status(404).json({ error: 'No existe esa ruta.' }));
   app.use(responderError(registrar));
   return app;
 }
 
-function registrarSolicitudes(registrar) {
+function medirSolicitudes(metricas, registrar) {
   return (solicitud, respuesta, siguiente) => {
-    const inicio = performance.now();
+    const fin = metricas.duracionDeSolicitudes.startTimer();
     respuesta.on('finish', () => {
+      const ruta = solicitud.route?.path ?? 'otra';
+      const segundos = fin({ metodo: solicitud.method, ruta, estado: respuesta.statusCode });
       registrar('info', 'solicitud', {
         metodo: solicitud.method,
-        ruta: solicitud.route?.path ?? 'otra',
+        ruta,
         estado: respuesta.statusCode,
-        ms: Math.round(performance.now() - inicio),
+        ms: Math.round(segundos * 1000),
       });
     });
     siguiente();

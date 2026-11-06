@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import { crearApp } from '../src/app.js';
+import { crearMetricas } from '../src/metricas.js';
 import { isCodigoValido } from '../src/pedidos.js';
 
 const PRODUCTOS = [
@@ -52,7 +53,7 @@ function crearFalsos() {
       if (estado.isRedisCaido) throw new Error('sin Redis');
     },
   };
-  return { estado, almacen, cola, registrar: () => {}, atendidoPor: 'caja-de-prueba' };
+  return { estado, almacen, cola, metricas: crearMetricas(), registrar: () => {}, atendidoPor: 'caja-de-prueba' };
 }
 
 async function conServidor(dependencias, prueba) {
@@ -208,6 +209,28 @@ describe('salud', () => {
     falsos.estado.isRedisCaido = true;
     await conServidor(falsos, async (pedir) => {
       assert.equal((await pedir('/salud/listo')).status, 503);
+    });
+  });
+});
+
+describe('métricas', () => {
+  it('cuenta los pedidos creados', async () => {
+    await conServidor(crearFalsos(), async (pedir) => {
+      await pedir('/api/pedidos', enviar(PEDIDO));
+      const metricas = await (await pedir('/metricas')).text();
+      assert.match(metricas, /fruteria_pedidos_creados_total 1/);
+    });
+  });
+
+  it('mide cada respuesta con su ruta y su estado', async () => {
+    const falsos = crearFalsos();
+    falsos.almacen.listarProductos = async () => {
+      throw new Error('sin conexión');
+    };
+    await conServidor(falsos, async (pedir) => {
+      await pedir('/api/productos');
+      const metricas = await (await pedir('/metricas')).text();
+      assert.match(metricas, /fruteria_solicitudes_http_segundos_count\{[^}]*ruta="\/api\/productos"[^}]*estado="500"[^}]*\} 1/);
     });
   });
 });

@@ -1,7 +1,16 @@
 name: la-fruteria
 
+# Por defecto, Docker no rota la bitácora y puede llenar el disco.
+# Con este tope, cada caja guarda a lo sumo 3 archivos de 10 MB.
+x-bitacora: &bitacora
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
 # Servicios propios sin privilegios y en solo lectura.
 x-endurecido: &endurecido
+  logging: *bitacora
   read_only: true
   tmpfs:
     - /tmp
@@ -113,6 +122,7 @@ services:
       - /var/run/postgresql
     security_opt:
       - no-new-privileges:true
+    logging: *bitacora
     restart: unless-stopped
     healthcheck:
       <<: *salud
@@ -134,6 +144,7 @@ services:
     read_only: true
     security_opt:
       - no-new-privileges:true
+    logging: *bitacora
     restart: unless-stopped
     healthcheck:
       <<: *salud
