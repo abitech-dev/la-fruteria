@@ -3,9 +3,10 @@ groups:
     rules:
       # Una sola alerta, por algo que el cliente nota y pide actuar ya.
       - alert: PedidosConError
+        # Solo cuentan los pedidos de los clientes, no los chequeos de salud.
         expr: |
-          sum(rate(fruteria_solicitudes_http_segundos_count{estado=~"5.."}[5m]))
-            / sum(rate(fruteria_solicitudes_http_segundos_count[5m])) > 0.05
+          sum(rate(fruteria_solicitudes_http_segundos_count{ruta=~"/api/.*", estado=~"5.."}[5m]))
+            / sum(rate(fruteria_solicitudes_http_segundos_count{ruta=~"/api/.*"}[5m])) > 0.05
         # Un tropiezo de segundos no despierta a nadie.
         for: 2m
         labels:
