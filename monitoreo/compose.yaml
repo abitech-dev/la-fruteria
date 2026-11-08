@@ -1,0 +1,106 @@
+# Los sensores de la tienda. Se suma después de compose.produccion.yaml,
+# así que sus rutas parten de la carpeta del proyecto.
+x-sensor: &sensor
+  read_only: true
+  tmpfs:
+    - /tmp
+  cap_drop:
+    - ALL
+  security_opt:
+    - no-new-privileges:true
+  restart: unless-stopped
+  logging:
+    driver: json-file
+    options:
+      max-size: "10m"
+      max-file: "3"
+
+services:
+  # Lee las métricas de la API cada 15 segundos y revisa las reglas.
+  prometheus:
+    <<: *sensor
+    image: prom/prometheus:v3.15.1@sha256:fa3302279710be2f21a8301ec17a8b4f2301fd829bd113839b3b6b02b6f191a2
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      # Las lecturas viejas se borran antes de pasar de 1 GB.
+      - --storage.tsdb.retention.size=1GB
+    volumes:
+      - ./monitoreo/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoreo/reglas.yml:/etc/prometheus/reglas.yml:ro
+      - datos-prometheus:/prometheus
+    networks:
+      - fondo
+      - monitoreo
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+          pids: 100
+
+  # Recibe las alertas de Prometheus y le avisa a Mirella por Telegram.
+  alertmanager:
+    <<: *sensor
+    image: prom/alertmanager:v0.34.1@sha256:e9733bafb1bdef9b00e25a21f8f99dc26a22224bf16641ad754d1649f4c3357a
+    volumes:
+      - ./monitoreo/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      - datos-alertmanager:/alertmanager
+    secrets:
+      - telegram_token
+      - telegram_chat
+    networks:
+      - monitoreo
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 64M
+          pids: 100
+
+  # El tablero. Solo atiende en el servidor, y se llega por un túnel SSH.
+  grafana:
+    <<: *sensor
+    image: grafana/grafana:13.2.4@sha256:dbbc38ea21103cefb50396340cd88afec779c7e070b0a7bf5a75b4ce46651d3f
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD__FILE: /run/secrets/grafana_clave
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      # Solo los complementos de la imagen, sin bajar ni actualizar nada.
+      GF_PLUGINS_PREINSTALL_DISABLED: "true"
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - ./monitoreo/grafana/fuentes.yaml:/etc/grafana/provisioning/datasources/fuentes.yaml:ro
+      - ./monitoreo/grafana/tableros.yaml:/etc/grafana/provisioning/dashboards/tableros.yaml:ro
+      - ./monitoreo/grafana/tableros:/etc/grafana/tableros:ro
+      - datos-grafana:/var/lib/grafana
+    secrets:
+      - grafana_clave
+    networks:
+      - monitoreo
+    depends_on:
+      - prometheus
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+          pids: 200
+
+networks:
+  # Con salida a internet, porque Alertmanager le escribe a Telegram.
+  monitoreo:
+
+volumes:
+  datos-prometheus:
+  datos-alertmanager:
+  datos-grafana:
+
+secrets:
+  grafana_clave:
+    file: ./secretos/grafana_clave.txt
+  telegram_token:
+    file: ./secretos/telegram_token.txt
+  telegram_chat:
+    file: ./secretos/telegram_chat.txt

@@ -1,0 +1,10 @@
+route:
+  receiver: prueba
+  group_by: ["alertname"]
+  group_wait: 30s
+  repeat_interval: 4h
+
+receivers:
+  - name: prueba
+    webhook_configs:
+      - url: http://receptor:8080/

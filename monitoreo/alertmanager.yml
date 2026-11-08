@@ -1,0 +1,12 @@
+route:
+  receiver: mirella
+  group_by: ["alertname"]
+  group_wait: 30s
+  repeat_interval: 4h
+
+receivers:
+  # La clave del bot y el número del chat viven en secretos/, fuera de Git.
+  - name: mirella
+    telegram_configs:
+      - bot_token_file: /run/secrets/telegram_token
+        chat_id_file: /run/secrets/telegram_chat

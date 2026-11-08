@@ -47,6 +47,12 @@ services:
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
+    # El mismo tope de bitácora que las cajas de compose.yaml.
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     deploy:
       resources:
         limits:

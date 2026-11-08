@@ -1,0 +1,89 @@
+{
+  "uid": "la-fruteria",
+  "title": "La Frutería",
+  "tags": ["tienda"],
+  "timezone": "browser",
+  "refresh": "30s",
+  "time": { "from": "now-1h", "to": "now" },
+  "schemaVersion": 41,
+  "panels": [
+    {
+      "id": 1,
+      "type": "timeseries",
+      "title": "Latencia, lo que espera un cliente",
+      "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": { "defaults": { "unit": "s" }, "overrides": [] },
+      "targets": [
+        {
+          "refId": "A",
+          "legendFormat": "el 1 % más lento",
+          "expr": "histogram_quantile(0.99, sum by (le) (rate(fruteria_solicitudes_http_segundos_bucket{ruta=~\"/api/.*\"}[5m])))"
+        },
+        {
+          "refId": "B",
+          "legendFormat": "promedio",
+          "expr": "sum(rate(fruteria_solicitudes_http_segundos_sum{ruta=~\"/api/.*\"}[5m])) / sum(rate(fruteria_solicitudes_http_segundos_count{ruta=~\"/api/.*\"}[5m]))"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "timeseries",
+      "title": "Tráfico, en pedidos por segundo",
+      "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": { "defaults": { "unit": "reqps" }, "overrides": [] },
+      "targets": [
+        {
+          "refId": "A",
+          "legendFormat": "{{ruta}}",
+          "expr": "sum by (ruta) (rate(fruteria_solicitudes_http_segundos_count{ruta=~\"/api/.*\"}[5m]))"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "timeseries",
+      "title": "Errores, los pedidos que fallan",
+      "gridPos": { "x": 0, "y": 8, "w": 12, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 0.05 }
+            ]
+          },
+          "custom": { "thresholdsStyle": { "mode": "line" } }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "legendFormat": "con error",
+          "expr": "sum(rate(fruteria_solicitudes_http_segundos_count{ruta=~\"/api/.*\", estado=~\"5..\"}[5m])) / sum(rate(fruteria_solicitudes_http_segundos_count{ruta=~\"/api/.*\"}[5m]))"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "timeseries",
+      "title": "Saturación, la memoria de la API frente a su tope",
+      "gridPos": { "x": 12, "y": 8, "w": 12, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": { "defaults": { "unit": "percentunit", "max": 1 }, "overrides": [] },
+      "targets": [
+        {
+          "refId": "A",
+          "legendFormat": "{{instance}}",
+          "expr": "process_resident_memory_bytes{job=\"api\"} / (256 * 1024 * 1024)"
+        }
+      ]
+    }
+  ]
+}
