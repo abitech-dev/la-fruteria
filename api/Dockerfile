@@ -7,6 +7,8 @@ RUN npm ci --omit=dev
 FROM node:24-alpine@sha256:44fce696f38ba8c987c4db89954051000bbd05ffd8d8659ba15ed4a8602e937f
 ENV NODE_ENV=production
 WORKDIR /app
+# Las correcciones de seguridad de Alpine llegan antes que la imagen oficial.
+RUN apk upgrade --no-cache
 COPY --from=dependencias /app/node_modules ./node_modules
 COPY package.json ./
 COPY src ./src
