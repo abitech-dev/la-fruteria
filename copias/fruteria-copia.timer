@@ -1,0 +1,12 @@
+[Unit]
+Description=Copia diaria de La Frutería
+
+[Timer]
+# A las 3:30 de Lima, cuando casi nadie compra.
+OnCalendar=*-*-* 03:30:00 America/Lima
+RandomizedDelaySec=10min
+# Si el servidor estaba apagado a esa hora, la copia corre al encender.
+Persistent=true
+
+[Install]
+WantedBy=timers.target

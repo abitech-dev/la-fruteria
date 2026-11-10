@@ -1,0 +1,12 @@
+# Un depósito compatible con S3 al lado del servidor de práctica, como
+# el que alquilarías fuera de él. Se suma a servidor/practica/compose.yaml.
+services:
+  almacen:
+    image: rclone/rclone:1.75.2@sha256:2687085f718d3c628f7fdfb77c52a1d344332aed543110bb88088f2c70d43eb5
+    # La clave de práctica solo sirve dentro de esta red, sin puertos abiertos.
+    command: ["serve", "s3", "--addr", ":8080", "--auth-key", "practica,clave-de-practica", "/datos"]
+    volumes:
+      - datos-almacen:/datos
+
+volumes:
+  datos-almacen:
