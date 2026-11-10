@@ -1,0 +1,10 @@
+[Unit]
+Description=Copia de PostgreSQL de La Frutería
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+# La carpeta de la tienda del usuario que crea servidor/preparar.sh.
+WorkingDirectory=/home/tienda/la-fruteria
+ExecStart=/usr/bin/bash copias/copiar.sh

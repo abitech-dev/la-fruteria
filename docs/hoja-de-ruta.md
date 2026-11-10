@@ -109,7 +109,7 @@ Dice qué gana la tienda en cada capítulo y qué etiqueta de Git marca ese esta
 | 5 | Dokploy, Coolify y Portainer | `servidor/panel/compose.yaml`, Portainer abierto solo en el mismo servidor, para entrar por un túnel SSH. | `vol06-cap05` |
 | 6 | Despliegues sin cortes | `docker-rollout` cambia la API y la vitrina sin cortar pedidos, y la base suma una columna que sirve a las dos versiones. nginx cuenta el tope de pedidos por cliente, también detrás de Caddy. | `vol06-cap06` |
 | 7 | Logs, métricas y alertas | Cada bitácora con tope de 3 archivos de 10 MB. La API publica `/metricas`, y `monitoreo/` trae Prometheus, Grafana con las cuatro señales y Alertmanager, que avisa por Telegram si falla más del 5 % de los pedidos. | `vol06-cap07` |
-| 8 | Copias y recuperación | La copia diaria de PostgreSQL fuera del servidor, con restic. | `vol06-cap08` |
+| 8 | Copias y recuperación | `copias/copiar.sh` saca la copia de PostgreSQL con `pg_dump` y restic la guarda cifrada en un depósito compatible con S3, con 7 días y 4 semanas. Un temporizador de systemd la corre cada noche. | `vol06-cap08` |
 | 9 | Manual de incidentes | El manual de incidentes de la tienda. | `vol06-cap09` |
 | 10 | Costos y tamaño | Los límites de memoria y CPU ajustados con mediciones reales. | `vol06-cap10` |
 
