@@ -42,10 +42,12 @@ services:
     healthcheck:
       <<: *salud
       test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8080/"]
+    # Con un cuarto de procesador, el núcleo la frenó 77 veces en
+    # carga/campana.js, y el 1 % más lento pasó de medio segundo.
     deploy:
       resources:
         limits:
-          cpus: "0.25"
+          cpus: "0.5"
           memory: 64M
           pids: 100
 
@@ -70,13 +72,13 @@ services:
     healthcheck:
       <<: *salud
       test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/salud/listo').then((r) => process.exit(r.ok ? 0 : 1), () => process.exit(1))"]
-    # Con carga/campana.js usó el 40 % de un procesador, el doble cabe en
-    # uno. Con 128 MB respondía más lento, aunque solo usaba 60 MB.
+    # Con carga/campana.js usó el 40 % de un procesador y 60 MB.
+    # El tope es el doble del pico.
     deploy:
       resources:
         limits:
           cpus: "1"
-          memory: 256M
+          memory: 128M
           pids: 100
 
   despachador:
