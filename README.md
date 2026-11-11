@@ -86,6 +86,10 @@ docker run --rm --network la-fruteria_frente \
 
 Las fuentes de `web/public/fuentes/` tienen licencia SIL Open Font License.
 
+## Si la tienda falla
+
+El [manual de incidentes](docs/manual-de-incidentes.md) dice qué mirar y en qué orden, cómo volver a la versión anterior y cómo escribir el informe.
+
 ## Autor y licencia
 
 La Frutería la escribió Abimael Epifanio Fernandez Ventura para la colección «Contenedores con peras y manzanas».
