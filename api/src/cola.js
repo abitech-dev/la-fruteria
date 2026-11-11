@@ -14,7 +14,7 @@ export function crearCola(cliente) {
     },
 
     async encolarDespacho(codigo) {
-      await cliente.lPush(CLAVE_DE_DESPACHOS, codigo);
+      await cliente.lPush(CLAVE_DE_DESPACHOS);
     },
 
     async tomarDespacho(segundosDeEspera) {
