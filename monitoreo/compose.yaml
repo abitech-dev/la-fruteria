@@ -85,7 +85,8 @@ services:
       resources:
         limits:
           cpus: "0.5"
-          memory: 256M
+          # En reposo ya usa unos 200 MB.
+          memory: 512M
           pids: 200
 
 networks:

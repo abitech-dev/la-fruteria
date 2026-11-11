@@ -70,10 +70,12 @@ services:
     healthcheck:
       <<: *salud
       test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/salud/listo').then((r) => process.exit(r.ok ? 0 : 1), () => process.exit(1))"]
+    # Con carga/campana.js usó el 40 % de un procesador, el doble cabe en
+    # uno. Con 128 MB respondía más lento, aunque solo usaba 60 MB.
     deploy:
       resources:
         limits:
-          cpus: "0.5"
+          cpus: "1"
           memory: 256M
           pids: 100
 
