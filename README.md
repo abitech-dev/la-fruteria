@@ -23,6 +23,10 @@ Las pruebas de la API también corren en un contenedor. En Git Bash para Windows
 docker run --rm -v "$PWD/api:/app" -v /app/node_modules -w /app node:24-alpine sh -c "npm ci && npm test"
 ```
 
+## Si la tienda falla
+
+El [manual de incidentes](docs/manual-de-incidentes.md) dice qué mirar y en qué orden, cómo volver a la versión anterior y cómo escribir el informe.
+
 ## Autor y licencia
 
 La Frutería la escribió Abimael Epifanio Fernandez Ventura para la colección «Contenedores con peras y manzanas».
